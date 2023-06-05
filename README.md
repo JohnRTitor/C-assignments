@@ -1,0 +1,1 @@
+This repo is for private use of John R Titor to mirror and store his repository of college assignments in C. You may check and use the code.
