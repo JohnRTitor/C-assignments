@@ -1,0 +1,125 @@
+				Algorithm - Stack using Linked List
+
+Input:- Option and inputs based on options if necessary
+Output:- As per user's option
+Data Structure:- Single Linked List
+
+Steps:-
+
+1: Start
+2: top = NULL // initalise top of the stack as NULL
+3: While (true) do
+    3.1: Print "Stack Operations: "
+    3.2: Print "1. Push, 2. Pop, 3. Reverse, 4. Display Stack, 5. Exit"
+    3.3: Print "Enter an option: "
+    3.4: Read option
+    3.5: Case option = 1
+        3.5.1: Print "Enter the element to push: "
+        3.5.2: Read data
+        3.5.3: push(top, data)
+    3.6: EndCase
+    3.7: Case option = 2
+        3.7.1: data ← pop(top)
+        3.7.2: If data ≠ EOF then
+        	3.7.2.1: Print "Popped element: ", data
+        3.7.3: EndIf
+    3.8: EndCase
+    3.9: Case option = 3
+    	3.9.1: Print "Before reversing: "
+    	3.9.2: printStack(top)
+        3.9.3: Print "After reverse: "
+        3.9.4: reverseStack(top)
+		3.9.5: printStack(top)
+    3.10: EndCase
+    3.11: Case option = 4
+    	3.11.1: Print "Stack is below: "
+        3.11.2: printStack(top)
+    3.12: EndCase
+    3.13: Case option = 5
+        3.13.1: Print "Program exited."
+    	3.13.2: Exit Loop
+    3.14: EndCase
+    3.15: Case Default
+    	3.15.1: Print "Invalid choice!"
+    3.16: EndCase
+4: EndWhile
+5: Stop
+
+				Procedure createNode (data)
+				
+// the function gets data externally to insert in each node
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← getNode(NODE)
+	3: If newNode = NULL then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return NULL/Exit Program
+	4: EndIf
+	5: newNode→info ← data
+	6: newNode→link ← NULL
+	7: Return newNode
+8: End Procedure
+
+				Procedure printStack (top)
+				
+// top is a node type pointer which signifies top of the stack
+
+Steps:-
+
+1: Begin Procedure
+	2: If top = NULL then
+		2.1: Print "Stack is empty."
+		2.2: Return
+	3: EndIf
+	4: current ← top
+	5: While current ≠ NULL do
+		5.1: Print current→info
+		current ← current→link
+	6: EndWhile
+7: EndProcedure
+
+				Procedure push (top, data)
+// Pushes an element on the top of the stack 
+
+Steps:-
+
+1: Begin Procedure
+	2: temp ← createNode(data) // temp is a temporary NODE type pointer
+	3: temp→link ← top
+	4: top ← temp
+5: End Procedure
+
+				Procedure pop (top)
+
+// Pop - removes the top element and returns it
+
+Steps:-
+
+1: Start
+	2: If top = NULL then
+		2.1: Print "Error: Stack is empty."
+		2.2: Return -1
+	3: EndIf
+	4: temp ← top
+	5: data ← top→info
+	6: top ← top→link
+	7: ReturnNode(temp) // free the memory associated with temp
+	8: Return data
+9: End Procedure
+
+				Procedure reverseStack (top)
+
+Steps:-
+
+1: Begin Procedure
+	2: tempTop ← NULL // tempTop is the top element's pointer of the temporary stack
+	3: While top ≠ NULL do
+		3.1: data ← pop(top) // pop elements from the original stack
+		3.2: If data ≠ EOF then // push it to tempStack
+			3.2.1: push(tempTop, data)
+		3.3: EndIf
+	4: EndWhile
+	5: top ← tempTop // temporary stack becomes the original stack
+6: End Procedure

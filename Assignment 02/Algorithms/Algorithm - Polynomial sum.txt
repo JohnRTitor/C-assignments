@@ -1,0 +1,208 @@
+				Algorithm (Sum of two Polynomials)
+				
+Input: The no of terms for polynomials f(x) and g(x). For the terms, read coefficients and exponent of x term
+Output: Normalised sum of f(x) and g(x)
+Data Structure: A single linked list POL - with member coeff and exp, and link to next node
+
+Steps:-
+
+1: Start
+2: Print "Enter f(x):"
+3: readPolynomial(f) // pass the address of f, a polynomial
+4: Print "Enter g(x):"
+5: readPolynomial(g) // pass the address of g, a polynomial
+6: Print "f(x) = "
+7: printPolynomial(f→link)
+8: Print "g(x) = "
+9: printPolynomial(g→link)
+10: Print "Sum = "
+11: addPolynomial(f, g, sum) // adds f and g and stores the result in sum which is called via reference
+12: printPolynomial(sum)
+13: Stop
+
+
+				Procedure createTerm (coefficient, exponent)
+
+// the function gets the required data (coefficient and exponent) and allocates memory for one term
+
+Steps:-
+1: Begin Procedure
+	2: newTerm ← getNode (POL)
+	3: If newTerm = EMPTY then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return EMPTY
+		3.3: End Procedure
+	4: EndIf
+	5: newTerm→coeff = coefficient, newTerm→exponent
+	6: newTerm→link = EMPTY
+	7: Return newTerm
+8: End Procedure
+
+
+				Procedure readPolynomial (head)
+				
+// head is the pointer of pointer of POL structure
+
+Steps:-
+
+1: Begin Procedure
+	2: head ← createTerm(0, 0)
+	3: Print "Enter no of terms:"
+	4: Read n
+	5: If n < 1 then
+		5,1: Print "Error: Invalid size!"
+		5.2: End Procedure
+	6: EndIf
+	7: ptr ←head
+	8: For i=1 to n do
+		8.1: Read temp→coeff, temp→exp
+		8.2: ptr→link = createTerm(temp→coeff, temp→exp
+		8.3: ptr = ptr→link, i ← i + 1
+	9: EndFor
+10: End Procedure
+
+
+			Procedure printPolynomial (head)
+			
+// prints a polynomial if given the pointer to the beginning of the list
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = NULL then
+		2.1: Print "Error: Polynomial does not exit."
+		2.2: End Procedure
+	3: ptr←head
+	4: End If
+	5: If ptr→link = NULL AND ptr→coeff = 0 then // if there is only one term with coeffient 0
+		5.1: Print "0"
+		5.2: End Procedure
+	6: EndIf
+	7: While ptr ≠ NULL do
+		// print the sign
+		7.1: If ptr ≠ head AND ptr→coeff > 0 then
+			7.1.1: Print " + "
+		7.2: Else If ptr→coeff < 0 then
+			7.2.1: Print " - "
+		7.3: EndIf
+		7.4: If ptr→coeff ≠ 0 AND ptr→coeff ≠ 1 then // print the coefficient
+			7.4.1: Print abs(ptr→coeff) // abs function used to get the absolute value for a given number
+		7.5: EndIf
+		7.6: If ptr→exp ≠ 0 AND ptr→coeff ≠ 0 then // print the x term
+			7.6.1: Print "x"
+			7.6.2: If ptr→coeff ≠ 1 then // include the exponent if needed
+				7.6.2.1: Print "^", ptr→exp
+			7.6.3: EndIf
+		7.7: EndIf
+		7.8: ptr = ptr→link
+	8: EndWhile
+9: End Procedure
+
+				Procedure addPolynomial (f, g, sum)
+
+Steps:-
+
+1: Begin Procedure
+	2: If f = EMPTY OR g = EMPTY then
+		2.1: Print "Error: Addition of f and g is not possible."
+		2.2: End Procedure
+	3: EndIf
+	4: sum←createTerm(0,0) // create empty header node
+	5: sumPtr←sum, ptr←f
+	6: While ptr ≠ EMPTY do // copies f's terms to the polynomial sum
+		6.1: sumPtr→link = createTerm(ptr→coeff, ptr→exp)
+		6.2: sumPtr = sumPtr→link
+		6.3: ptr = ptr→link
+	7: EndWhile
+	8: ptr←g
+	9: While ptr ≠ EMPTY do // append g's terms at the end of sum
+		9.1: sumPtr→link = createTerm(ptr→coeff, ptr→exp)
+		9.2: sumPtr = sumPtr→link
+		9.3: ptr = ptr→link
+	10: EndWhile
+	// f and g successfully merged, now sort
+	11: normalisePolynomial(sum→link) // normalising collects coefficients of similar terms (with same exponents)
+12: End Procedure
+
+
+				Procedure normalisePolynomial (head)
+
+// Normalises a polynomial, in other words, collects and merges coefficients of similar terms (with same exponent of x)
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: End Procedure
+	3: EndIf
+	4: If head→link = EMPTY then // as there is only one term, no need to normalise
+		4.1: End Procedure
+	5: EndIf
+	6: bubbleSortPolDec(head) // first sort the terms in descending order of x's exponent
+	7: currentTerm ← head // start from the beginning of the list
+	8: While currentTerm ≠ EMPTY do
+		8.1:  prevCompareTerm ← currentTerm // keep a pointer to prev term of compareTerm
+		8.2: compareTerm = currentTerm→link // should start comparing with the next term
+		8.3: While compareTerm ≠ EMPTY do // untill reaches the end of the list
+			8.3.1: If currentTerm→exp = compareTerm→exp then
+				8.3.1.1: currentTerm→coeff = currentTerm→coeff + compareTerm→coeff // add the coefficient to the current term
+				// delete the compareTerm by skipping the link to next node
+				8.3.1.2: prevCompareTerm→link = compareTerm→link 
+				8.3.1.3: ReturnNode(compareTerm) // free the node compare term
+			8.3.2: Else // just move the pointers ahead
+				8.3.2.1: prevCompareTerm = compareTerm
+				8.3.2.2: compareTerm = compareTerm→link
+			8.3.3: EndIf
+		8.4: EndWhile
+		8.5: currentTerm = currentTerm→link // move ahead in the list
+	9: EndWhile
+10: End Procedure
+
+
+				Procedure bubbleSortPolDec (head)
+				
+// if given the starting address of the list (head), sorts the terms into descending order of x's exponent
+				
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: End Procedure
+	3: EndIf
+	4: ptr ← head // ptr variable is for perfoming n-1 pass, this has no other use
+	5: lastSwapped ← NULL // used to mark the sorted portion of list
+	6: While ptr→link ≠ NULL do // pass loop
+		6.1: swapped ← false // initially set to false, used to check if a swap has been performed in a pass 
+		6.2: current ← head // set current to the first node each time
+		6.3: While current→link ≠ lastSwapped do // comparison loop
+			6.3.1: next = current→link // next node/term of current
+			6.3.2: If current→exp < next→exp then // compare and start swapping so element with the smallest degree of x ends up moved to last
+				// swap the data-- exponent and coefficient of the terms
+				6.3.2.1: swap(current→exp, next→exp)
+				6.3.2.2: swap(current→coeff, next→coeff)
+				6.3.2.3: swapped ← true // indicate swap is performed
+			6.3.3: EndIf
+			6.3.4: current = current→link // move current to compare the next elements
+		6.4: EndWhile
+		6.5: lastSwapped ← current // sorted portion starts from here
+		6.6: If swapped = false then // no swap occurred in the last pass, so list is sorted
+			6.6.1: Exit Loop
+		6.7: EndIf
+		6.8: ptr = ptr→link
+	7: EndWhile
+8: End Procedure
+
+
+				Procedure swap (x, y)
+
+// swaps two numbers, here x and y is called by reference and as such they represent the address of passed variables
+
+Steps:-
+
+1: Begin Procedure
+	2: temp ←x
+	3: x ← y
+	4: y ← temp
+5: End Procedure

@@ -1,0 +1,37 @@
+			Algorithm (Delete Element from Array)
+
+Input:- The array size, list of elements along with the element to look for and delete.
+Output:- If the target element has been found, show how many times it got deleted. Else indicate that the search was unsuccessful. In both cases, print the array.
+Data Structure:- One Dimensional Array
+
+Steps:-
+1: Start
+2: Print "Enter the size"
+3: Read size
+4: If size < 1 then
+	4.1: Print "Invalid size."
+	4.2: Stop
+5: EndIf
+6: For i=0 to size-1 do // i is the loop counter
+	6.1: Read arr[i]
+7: EndFor
+8: Print "Which element to delete?"
+9: Read target
+10: count ← 0 // count tracks how many times deletion has been performed
+11: For i=0 to size-1 do
+	11.1: If arr[i] = target then
+		11.1.1: For j=i to less than size-1 do
+			11.1.1.1: arr[j] ← arr[j+1]
+		11.1.2: EndFor
+		11.1.3: count ← count + 1 // deletion performed +1 times
+	11.2: EndIf
+12: EndFor
+13: If count > 0 then
+	13.1: Print target, "found", count, "times in the array and successfully deleted. Modified array is below:"
+14: Else
+	14.1: Print target, "not found in the array and thus can not be deleted."
+15: EndIf
+16: For i=0 to size-1-count do
+	16.1: Print arr[i]
+17: EndFor
+18: Stop

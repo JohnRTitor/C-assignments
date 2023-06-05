@@ -1,0 +1,653 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <limits.h>
+#pragma GCC diagnostic ignored "-Wgnu-statement-expression"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
+#define IS_INVALID_OPTION(x) (x == 1 || x == 2 || x == 8 || x == 9 || x == 10)
+#define IS_EMPTY(root) \
+	({\
+		if (root == NULL)\
+		{\
+			fprintf(stderr, "Error: Tree is empty.");\
+			break;\
+		}\
+	})
+
+typedef struct node
+{
+	int info;
+	struct node *left;
+	struct node *right;
+} NODE;
+
+typedef struct stackNode
+{
+	NODE *treeNode;
+	struct stackNode *link;
+} SNODE;
+
+
+				Algorithm Menu - Binary Search Tree using Linked List
+				
+Input:-
+Output:-
+Data Structure:-
+
+Steps:-
+
+1: Start
+2: mode ← "recursion" // recursion is used by default
+3: root ← NULL // initialise tree as empty
+4: While (true) do
+	4.1: BST ← isBST(root)
+    4.2: Print "Binary Tree operations: "
+    4.3: Print "0. Change Mode - current: ", mode
+    4.4: If BST then
+        4.4.1. Print "1. Insert a node^°, 2. Delete a node^°"
+    4.5: EndIf
+    4.6: Print "3. Inorder Traversal^, 4. Preorder Traversal^, 5. Postorder Traversal^, 6. Level order traversal, 7. Find the height of the tree"
+    4.7: If BST then
+		4.7.1: Print "8. Find the minimum element°, 9. Find the maximum element°, 10. Search element°"
+    4.8: EndIf
+    4.9: Print "11. Count the number of leaf nodes, 12. Count the number of non-leaf nodes, 13. Mirror tree, 14. Delete tree, 15. Exit"
+    4.10: Print "^ - Affected by mode change."
+    4.11: Print "° - Maybe unavailable after mirroring."
+    4.12: Print "Enter an option: "
+    4.13: Read option
+    4.14: If not BST AND option in [1, 2, 8, 9, 10] // due to issues after mirroring, inaccessible options are to forwarded to an error message
+    	4.14.1: Print "The tree is no longer a binary search tree (BST). If you have mirrored the tree, please mirror it again to fix it. Only a few options are available."
+    	4.14.2: Continue
+    4.15: EndIf
+    4.16: Case option=0
+        4.16.1: Print "Press 1 for recursive mode, or any key for iterative mode: "
+        4.16.2: Read modeOption
+        4.16.3: If modeOption = 1 then
+        	4.16.3.1: mode ← "recursion"
+        4.16.4: Else
+        	4.16.4.1: mode ← "iteration"
+        4.16.5: EndIf
+    4.17: EndCase
+	4.18: Case option = 1
+		4.18.1: insertNode(root, mode)
+	4.19: EndCase
+	4.20: Case option = 2
+		4.20.1: deleteNode(root, mode)
+	4.21: EndCase
+	4.22: Case option = 3
+		4.22.1: inorderTraversal(root, mode)
+	4.23: EndCase
+	4.24: Case option = 4
+		4.24.1: preorderTraversal(root, mode)
+	4.25: EndCase
+	4.26: Case option = 5
+		4.26.1; postorderTraversal(root, mode)
+	4.27: EndCase
+	4.28: Case option = 6
+		4.28.1: levelOrderTraversal(root);
+	4.29: EndCase
+	4.30: Case option = 7
+		4.30.1: Print "Height of the tree is ", getHeight(root)
+	4.31: EndCase
+	4.32: Case option = 8
+		4.32.1: loc ← findMin(root)
+		4.32.2: Print "The minimum element of the tree is ", loc→info
+	4.33: EndCase
+	4.34: Case option = 9
+		4.34.1: loc ← findMax(root)
+		4.34.2: Print "The maximum element of the tree is ", loc→info
+	4.35: EndCase
+	4.36: Case option = 10
+		4.36.1: Print "Which element to search?"
+        4.36.2: Read data
+		4.36.3: searchNode(root, data, loc, par)
+		4.36.4: If loc ≠ NULL then
+        	4.36.4.1: Print data, " found in the tree."
+        4.36.5: Else
+        	4.36.5.1: Print data, " not found in the tree."
+        4.36.6: EndIf
+	4.37: EndCase
+	4.38: Case option = 11
+		4.38.1: Print "No of leaf nodes is: ", countLeafNodes(root)
+	4.39: EndCase
+	4.40: Case option = 12
+		4.40.1: Print "No of non-leaf nodes is: ", countNonLeafNodes(root)
+	4.41: EndCase
+	4.42: Case option = 13
+		4.42.1: mirrorTree(root)
+		4.42.2: Print "Successfully mirrored the tree."
+	4.43: EndCase
+	4.44: Case option = 14
+		4.44.1: eraseTree(root)
+		4.44.2: Print "Successfully deleted the entire tree."
+	4.45: EndCase
+	4.46: Case option = 15
+		4.46.1: Print "Program exited."
+        4.46.2: Exit Loop
+	4.47: Case Default
+		4.47.1: Print "Invalid input. Please try again."
+	4.48: EndCase
+5: EndWhile
+6: eraseTree(root)
+7: Stop
+			
+				Procedure createNode (data)
+// the function gets data externally to insert in each node
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← getNode(NODE)
+	3: If newNode = NULL then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return NULL
+	4: EndIf
+	5: newNode→info = data
+	6: newNode→left = NULL
+	7: newNode→right = NULL
+	8: Return newNode
+9: End Procedure
+
+
+				Procedure insertNode (root, mode)
+
+// root is the root of the binary search tree
+// mode is the operation mode the user selected
+
+Steps:-
+1: Begin Procedure
+	2: Print "Enter the data to be inserted: "
+	3: Read data
+	4: If mode = "recursion" then
+		4.1: root ← insertNodeRecursive(root, data)
+	5: Else
+		5.1: insertNodeIterative(root, data)
+	6: EndIf
+	7: Print data, " successfully inserted."
+8: End Procedure
+
+				Procedure deleteNode (root, mode)
+
+Steps:-
+
+1: Start
+	2: Print "Enter the data to be deleted: "
+	3: Read data
+	4: If mode = "recursion" then
+		4.1: root ← deleteNodeRecursive(root, data)
+	5: Else
+		5.1: deleteNodeIterative(root, data)
+	6: EndIf
+	7: Print data, " successfully deleted."
+8: End Procedure
+
+				Procedure inorderTraversal (root, mode)
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Inorder traversed elements are below: "
+	3: If mode = "recursion" then
+		3.1: inorderRecursive(root)
+	4: Else
+		4.1: inorderIterative(root)
+	5: EndIf
+6: End Procedure
+
+				Procedure preorderTraversal (root, mode)
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Preorder traversed elements are below: "
+	3: If mode = "recursion" then
+		3.1: preorderRecursive(root)
+	4: Else
+		4.1: preorderIterative(root)
+	5: EndIf
+6: End Procedure
+
+				Procedure postorderTraversal (root, mode)
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Postorder traversed elements are below: "
+	3: If mode = "recursion" then
+		3.1: postorderRecursive(root)
+	4: Else
+		4.1: postorderIterative(root)
+	5: EndIf
+6: End Procedure
+
+				Procedure findMin (root)
+
+// returns the address of the minimum node
+
+Steps:-
+
+1: Begin Procedure
+	2: currrent ← root // start from the root node
+	3: While current→left ≠ NULL do // keep going as left as possible
+		3.1: current ← currrent→left
+	4: EndWhile
+	5: Return current // return the left most node which is minimum valued
+6: End Procedure
+
+				Procedure findMax (root)
+
+// returns the address of the maximum valued node
+
+Steps:-
+
+1: Begin Procedure
+	2: currrent ← root // start from the root node
+	3: While current→right ≠ NULL do // keep going as right as possible
+		3.1: current ← currrent→right
+	4: EndWhile
+	5: Return current // return the right most node which is the maximum valued node
+6: End Procedure
+
+				Procedure insertNodeRecursive (NODE *root, int data) // inserts a node, no duplicate element allowed
+
+// inserts node and returns the address of the root
+
+Steps:-
+
+1: Begin Procedure
+    2: If root = NULL then // the tree is empty
+        2.1: Return createNode(data) // just create the root node
+    3: Else If data < root→info then
+        3.1: root→left ← insertNodeRecursive(root→left, data) // recursively insert in the left subtree
+    4: Else If root→info < data then
+        4.1: root→right ← insertNodeRecursive(root→right, data) // recursively insert in the right subtree
+    5: EndIf
+    6: Return root // then just return root node's address
+7: End Procedure
+
+				Procedure deleteNodeRecursive (root, data)
+
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL then // tree is empty
+		2.1: Return NULL // nothing to delete
+	3: Else If data < root→info then // node to be deleted is in the left subtree
+		3.1: root→left ← deleteNodeRecursive(root→left, data) // recursively delete the data from the left subtree
+	4: Else If root→info < data then // node to be deleted is in the right subtree
+		4.1: root→right ← deleteNodeRecursive(root→right, data) // recursively delete the data from the right subtree
+	5: Else // else root is to be deleted
+		5.1: If root→left = NULL // there is no left child
+			5.1.1: temp ← root→right
+			5.1.2: ReturnNode(root) // delete root
+			5.1.3: Return temp // return the right subtree, so that it becomes the root 
+		5.2: Else If root→right = NULL // there is no right child
+			5.2.1: temp ← root→left
+			5.2.2: ReturnNode(root) // delete root
+			5.2.3: return temp; // return the left subtree, so that it becomes the root
+		5.3: EndIf
+		5.4: temp ← findMin(root→right) // get the node with the minimum value from the right subtree
+		root->info = temp->info; // delete the root's data
+		root->right = deleteNodeRecursive(root->right, temp->info); // delete the temp node since it has been moved up to root
+	}
+	return root;
+}
+
+void inorderRecursive (NODE *root)
+{
+	if (root != NULL)
+	{
+		inorderRecursive(root->left);
+		printf("%d, ", root->info);
+		inorderRecursive(root->right);
+	}
+}
+
+void preorderRecursive (NODE *root)
+{
+	if (root != NULL)
+	{
+		printf("%d, ", root->info);
+		preorderRecursive(root->left);
+		preorderRecursive(root->right);
+	}
+}
+
+void postorderRecursive (NODE *root)
+{
+	if (root != NULL)
+	{
+		postorderRecursive(root->left);
+		postorderRecursive(root->right);
+		printf("%d, ", root->info);
+	}
+}
+
+void freeTree (NODE **root)
+{
+    if (*root != NULL)
+    {
+        freeTree( &((*root)->left) );
+        freeTree( &((*root)->right) );
+        free(*root);
+        *root = NULL;
+    }
+}
+
+void searchNode (NODE *root, int target, NODE **par, NODE **loc) // uses iteration to find the target, modifies loc to contain the address of target node and par to contain the address of its parent
+{
+	NODE *save, *ptr;
+	if (root == NULL) // tree is empty
+	{
+		*par = NULL;
+		*loc = NULL;
+		return;
+	}
+	if (target == root->info)
+	{
+		*par = NULL;
+		*loc = root;
+		return;
+	}
+	// initialise save and ptr pointers which will be used to traverse
+	save = root;
+	// if target is less than root element, the target must be in the left subtree
+	// else it would be in the right subtree
+	ptr = (target < root->info) ? root->left : root->right;
+	// use a loop to search the tree
+	while (ptr != NULL)
+	{
+		if (target == ptr->info)
+		{
+			*par = save;
+			*loc = ptr;
+			return;
+		}
+		// traverse further into the tree
+		save = ptr;
+		ptr = (target < ptr->info) ? ptr->left : ptr->right;
+	}
+	// we reach here when the search is unsuccessful
+	*par = save;
+	*loc = NULL;
+}
+
+void insertNodeIterative (NODE **root, int data)
+{
+	NODE *par, *loc;
+	// search the element first
+	searchNode(*root, data, &par, &loc);
+	if (loc != NULL) // the data already exists, can't be inserted again
+		return;
+	loc = createNode(data); // else, create a new node with the provided data
+	if (par == NULL) // this means, the tree is empty
+		*root = loc; // so new node must become the root
+	else if (data < par->info)
+		par->left = loc;
+	else
+		par->right = loc;
+}
+void deleteNodeIterative (NODE **root, int target)
+{
+	NODE *par, *loc;
+	searchNode(*root, target, &par, &loc);
+	if (loc == NULL)
+	{
+		fprintf(stderr, "Target data (%d) not in tree, so it couldn't be deleted.", target);
+		return;
+	}
+	if (loc->left != NULL && loc->left != NULL) // both child exists
+		deleteParentOfTwo(root, &par, &loc);
+	else // single or no child
+		deleteSingleParent(root, &par, &loc);
+}
+
+void deleteSingleParent (NODE **root, NODE **par, NODE **loc)
+{
+	// loc is the node to be deleted, "child" is the child of loc
+	NODE *child;
+	if ((*loc)->left == NULL && (*loc)->right == NULL) // loc is childless
+		child = NULL;
+	else if ((*loc)->left != NULL) // left child exists
+		child = (*loc)->left;
+	else // right child exists
+		child = (*loc)->right;
+	if (*par != NULL)
+	{
+		if (*loc == (*par)->left) // if loc is parent's left child
+			(*par)->left = child; // parent inherits loc's only child as its left child
+		else // else loc must be parent's right child
+			(*par)->right = child; // parent inherits loc's only child as its  right child
+	}
+	else // loc was the root node, so delete the root
+		*root = child;
+	free(*loc); // finally delete loc
+}
+
+void deleteParentOfTwo (NODE **root, NODE **par, NODE **loc)
+{
+	// Find the inorder successor of loc, by going to the left most node of right subtree of loc
+	NODE *parsuc = *loc;
+	NODE *suc = (*loc)->right;
+	while (suc->left != NULL)
+	{
+		parsuc = suc;
+		suc = suc->left;
+	}
+	(*loc)->info = suc->info; // replace loc's data with its inorder successor, effectively deleting the node
+	deleteSingleParent(root, &parsuc, &suc); // delete the inorder successor leaf node
+}
+
+void push (SNODE **top, NODE *tNode)
+{
+	SNODE *newSNode = (SNODE *)malloc(sizeof(SNODE));
+	if (newSNode == NULL)
+	{
+		fprintf(stderr, "Error: Memory not allocated.");
+		exit(-1);
+	}
+	newSNode->treeNode = tNode;
+	newSNode->link = *top;
+	*top = newSNode;
+}
+
+NODE* pop (SNODE **top)
+{
+	SNODE *temp;
+	NODE *popped;
+	if (*top == NULL)
+		return NULL;
+	temp = *top;
+	popped = temp->treeNode;
+	*top = (*top)->link;
+	free(temp);
+	return popped;
+}
+
+NODE* peek (SNODE *top)
+{
+	return top->treeNode;
+}
+
+int isStackEmpty(SNODE *top)
+{
+	return (top == NULL);
+}
+
+// Left Subtree, Root, Right Subtree
+void inorderIterative (NODE *root)
+{
+	NODE *current;
+	SNODE *top = NULL; // stack is initially NULL
+	if (root == NULL) // tree is empty, so exit the function
+		return;
+	current = root;
+	while (current != NULL || !isStackEmpty(top))
+	{
+		while (current != NULL) // keep pushing the left nodes into the stack
+		{
+			push(&top, current);
+			current = current->left;
+		}
+		current = pop(&top); // pop a node from the stack
+		printf("%d, ", current->info); // and print it
+		current = current->right; // move to the right subtree
+	}
+}
+
+// Root, Left Subtree, Right Subtree
+void preorderIterative (NODE *root)
+{
+	NODE *current;
+	SNODE *top = NULL;
+	if (root == NULL)
+		return;
+	current = root;
+	while (current != NULL)
+	{
+		printf("%d, ", current->info);
+		// by pushing the right child before left child, we essentially get the left first when popping
+		if (current->right != NULL)
+			push(&top, current->right);
+		if (current->left != NULL)
+			current = current->left;
+		else
+			current = pop(&top);
+	}
+}
+// Left Subtree, Right Subtree, Root
+void postorderIterative(NODE *root)
+{
+    NODE *current, *prev;
+    SNODE *top = NULL;
+    if (root == NULL) // tree is empty
+        return;
+    current = root;
+    prev = NULL; // used to track previously visited node
+    do // run atleast once, until stack is empty
+    {
+        // Traverse the left subtree and push nodes onto the stack
+        while (current != NULL)
+        {
+            push(&top, current);
+            current = current->left;
+        }
+
+        while (current == NULL && !isStackEmpty(top))
+        {
+            current = peek(top);
+
+            // If the right subtree is not yet processed or visited
+            if (current->right != NULL && current->right != prev)
+            {
+                current = current->right;
+            }
+            else
+            {
+                printf("%d, ", current->info);
+                pop(&top);
+                prev = current;
+                current = NULL;
+            }
+        }
+    } while (!isStackEmpty(top));
+}
+
+int getHeight (NODE *root)
+{
+	int leftHeight, rightHeight;
+	if (root == NULL)
+		return 0;
+	leftHeight = getHeight(root->left);
+	rightHeight = getHeight(root->right);
+	return ((leftHeight > rightHeight) ? leftHeight + 1 : rightHeight + 1);
+}
+
+void levelOrderTraversal (NODE *root)
+{
+	int i, height;
+	if (root == NULL)
+		return;
+	height = getHeight(root);
+	printf("Level order traversed elements are below:\n");
+	for (i = 0; i < height; i++)
+	{
+		printCurrentLevel(root, i);
+	}
+}
+
+void printCurrentLevel (NODE *root, int level)
+{
+	if (root == NULL || level >= getHeight(root))
+		return;
+	if (level == 0)
+		printf("%d, ", root->info);
+	else if (level > 0)
+	{
+		printCurrentLevel(root->left, level - 1);
+		printCurrentLevel(root->right, level - 1);
+	}
+}
+
+int countLeafNodes (NODE *root)
+{
+	if (root == NULL)
+		return 0;
+	else if (root->left == NULL && root->right == NULL)
+		return 1;
+	else
+		return (countLeafNodes(root->left) + countLeafNodes(root->right));
+}
+
+int countNonLeafNodes (NODE *root)
+{
+	if (root == NULL || (root->left == NULL && root->right == NULL))
+		return 0;
+	else
+		return (1 + countNonLeafNodes(root->left) + countNonLeafNodes(root->right));
+}
+
+void mirrorTree (NODE *root)
+{
+	NODE *temp;
+	if (root == NULL)
+		return;
+	// mirror the subtrees as well
+	mirrorTree(root->left);
+	mirrorTree(root->right);
+	// swap the left child with the right child
+	temp = root->left;
+	root->left = root->right;
+	root->right = temp;
+}
+
+
+// isBST wrapper function
+int isBST(NODE* root)
+{
+    // Use the helper function with a large range to start with
+    return isBSTUtil(root, INT_MIN, INT_MAX);
+}
+
+// isBST helper function, assumes the tree has no duplicate nodes
+int isBSTUtil (NODE *root, int minVal, int maxVal)
+{
+    // Base case: an empty tree is considered a valid binary search tree
+    if (root == NULL)
+        return true;
+
+    // check if the current node's data is within the specified range
+    if (root->info < minVal || root->info > maxVal)
+        return false;
+
+    // recursively checks the left and right subtrees, updating the range accordingly
+    return (isBSTUtil(root->left, minVal, root->info - 1) && isBSTUtil(root->right, root->info + 1, maxVal));
+}
+
+void clearBuffer (void) // clears input buffer
+{
+	char ch;
+	while ((ch = getchar()) != '\n' && (int)ch != EOF); // discards leftover characters in the input stream
+}

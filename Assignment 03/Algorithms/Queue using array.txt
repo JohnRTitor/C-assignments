@@ -1,0 +1,90 @@
+				Algorithm - Queue using Array
+
+Input:- User's choice and inputs regarding the choices
+Output:- Depends on users' choices
+Data Structure:- A structure QUEUE, where elements are stored in member which is ane one dimensional array (element) and front, rear are the indicators for the front and end of the queue 
+
+Steps:-
+
+1: Start
+2: q→front = -1, q→rear = -1 // initialise Queue
+3: While (true) do
+	3.1: Print "Queue operations:"
+    3.2: Print "1. Enqueue, 2. Dequeue, 3. Display queue, 4. Exit"
+    3.3: Print "Enter an option: "
+    3.4: Read option
+    3.5: Case option = 1
+    	3.5.1: Print "Enter data to insert: "
+        3.5.2: Read data
+        3.5.3: enqueue(q, data)
+        3.5.4: Print data, " successfully inserted."
+    3.6: EndCase
+	3.7: Case option = 2
+    	3.7.1: data ← dequeue(q)
+        3.7.2: If data ≠ -1 then
+        	3.7.2.1: Print "Removed element:", data
+        3.7.3: EndIf
+	3.8: EndCase
+	3.9: Case option = 3
+		3.9.1: printQueue(q)
+	3.10: EndCase
+	3.11: Case option  = 4
+    	3.11.1: Print "Program exited."
+    	3.11.2: Exit Loop
+    3.12: EndCase
+	3.13: Case Default
+    	3.13.1: Print "Invalid input. Please try again."
+    3.14: EndCase
+4: EndWhile
+5: Stop
+
+				Procedure printQueue (q)
+
+// q is a QUEUE type structre
+
+Steps:-
+
+1: Begin Procedure
+	2: If q→front = -1 OR q→rear = -1 then
+		2.1: Print "Error: Queue is empty."
+		2.2: Return
+	3: EndIf
+	4: i ← q→front
+	5: While i ≤ q→rear do
+		5.1: Print q.element[i]
+		5.2: i ← i + 1
+	6: EndWhile
+7: EndProcedure
+
+				Procedure enqueue (q, data)
+
+// q is a QUEUE type structure, data is of integer type
+
+Steps:-
+
+1: Begin Procedure
+	2: If q->front = -1 AND q→rear == -1 then // queue is empty
+		2.1: q→front ← 0
+	3: EndIf
+	4: q→rear ← q→rear + 1
+	5: q→element[q→rear] ← data
+6: End Procedure
+
+				Procedure dequeue (q)
+
+// q is a QUEUE type structure
+
+Steps:-
+1: Begin Procedure
+	2: If q→front = -1 then
+		2.1: Print "Error: Queue is empty."
+		2.2: Return -1
+	3: EndIf
+	4: data ← q→element[q→front]
+	5: If q→front = q→rear then // there is only one element
+		5.1: q→front ← -1, q→rear ← -1
+	6: Else // multiple elements present
+		5.2: q→front ← q→front + 1
+	7: EndIf
+	8: Return data
+9: End Procedure

@@ -1,0 +1,155 @@
+				Algorithm (Menu - Sorting an array using Bubble, Selection or Insertion)
+				
+Input: The array size, list of elements and user's choice
+Output: Display sorted array using algorithm of user's choice
+Data Structure: One Dimensional Array
+
+Steps:-
+
+1: Start
+2: Print "Enter array"
+3: size ← readArray(arr)
+4: While (true)
+	4.1: Print "1 - Bubble Sort, 2 - Selection Sort, 3 - Insertion Sort, 4 - Reenter the array or 5 to exit"
+	4.2: Read option
+	4.3: Case option=1
+		4.3.1: bubbleSort(arr, size)
+		4.3.2: Print "Successfully sorted the array using Bubble Sort."
+		4.3.3: printArray(arr, size)
+	4.4: EndCase
+	4.5: Case option=2
+		4.5.1: selectionSort(arr, size)
+		4.5.2: Print "Successfully sorted the array using Selection Sort."
+		4.5.3: printArray(arr, size)
+	4.6: EndCase
+	4.7: Case option=3
+		4.7.1: insertionSort(arr, size)
+		4.7.2: Print "Successfully sorted the array using Insertion Sort."
+		4.7.3: printArray(arr, size)
+	4.8: EndCase
+	4.9: Case option=4
+		4.9.1: Print "Please reenter the array:"
+		4.9.2: size ← readArray(arr)
+	4.10: EndCase
+	4.11: Case option=5
+		4.11.1: Print "Program exited."
+		4.11.2: Stop
+	4.12: EndCase
+	4.13: Case default
+		4.13: Print "Error: Invalid input. Please try again."
+	4.14: EndCase
+5: EndWhile
+6: Stop
+
+
+				Procedure readArray (arr)
+
+// Reads array elements and size, returns the size, given array base address
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Enter the size:"
+	3: Read size
+	4: If size < 1 then
+		4.1: Print "Error: Invalid size"
+		4.2: Return -1
+		4.3: End Procedure
+	5: EndIf
+	6: For i=0 to size-1 do
+		6.1: Read arr[i]
+		6.2: i ← i + 1
+	7: EndFor
+	8: Return size
+9: End Procedure
+
+
+				Procedure printArray (arr, size)
+
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to size-1 do
+		2.1: Print arr[i]
+		2.2: i ← i + 1
+	3: EndFor
+4: End Procedure
+
+
+				Procedure bubbleSort (arr, size)
+
+// Sorts an array, given its base address and size
+
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to less than size-1 do // Pass loop
+		2.1: swapped ← false // swapped flag is for checking if a sorted position has been achived / array already sorted, initially set to false
+		2.2: For j=0 to less than size-1-i do // Comparison loop
+			2.2.1: If arr[j] > arr[j+1] then // if it finds an element less tan j'th element swaps
+				2.2.1.1: swap(arr[j], arr[j+1])
+				2.2.1.2: swapped ← true // not sorted, so set to true
+			2.2.2: EndIf
+			2.2.3: j ← j + 1
+		2.3: EndFor
+		2.4: If swapped = false then // already sorted, so no swap was performed
+			2.4.1: Exit // Break the loop
+		2.5: EndIf 
+		2.6: i ← i + 1
+	3: EndFor
+4: End Procedure
+
+
+				Procedure selectionSort (arr, size)
+
+// Sort an array, given its base address and size
+
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to less than size-1 do // Pass loop
+		2.1: minIndex ←i
+		2.2: For j=i+1 to size-1 do // finds the minimum from the unsorted portion
+			2.2.1: If arr[minIndex] > arr[j]
+				2.2.1.1: minIndex = j
+			2.2.2: EndIf
+			2.2.3: j ← j + 1
+		2.3: EndFor
+		2.4: If minIndex ≠ i // i'th element is not the minimum
+			2.4.1: swap(arr[minIndex], arr[i]) // swap with the minimum element
+		2.5: EndIf
+		2.6: i ← i + 1
+	3: EndFor
+4: EndProcedure
+
+
+				Procedure insertionSort (arr, size)
+
+// Sorts an array, given its base address and size
+
+Steps:-
+
+1: Begin Procedure
+	2: For i=1 to size-1 do // Pass loop
+		2.1: key ← arr[i], j ← i - 1 // set the initial position (j) for comparison, key stores the i'th element for insertion later
+		2.2: While j ≥ 0 AND arr[j] > key do // Comparison loop
+			2.2.1: arr[j+1] ← arr[j] // shift elements from j to right by one position
+			2.2.1: j ← j - 1
+		2.3: EndWhile
+		2.4: If j+1 ≠ i then // if this is false, key is already in its correct position 
+			2.4.1: arr[j+1] ← key // insert key if true
+		2.5: EndIf
+		2.6: i ← i + 1
+	3: EndFor
+4: End Procedure
+		
+				Procedure swap(x, y)
+// Swaps two numbers when called by their reference
+
+Steps:-
+
+1: Begin Procedure
+	2: temp ← x // temp is a temporary space to store x for swapping
+	3: x ← y
+	4: y ← temp
+5: End Procedure

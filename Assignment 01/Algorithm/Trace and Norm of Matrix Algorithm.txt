@@ -1,0 +1,90 @@
+			Algorithm (Trace and Norm of Matrix)
+
+Input: A matrix row and column count with the elements
+Output: Trace and Normal of the element
+Data Structure: Matrix type structure, with members row, colm, and a two dimensional array 'data' containing matrix elements
+
+
+// M is a matrix type structure
+
+Steps:-
+
+1: Start
+2: Print "Enter matrix:"
+3: readMatrix(M)
+4: Print "Matrix:"
+5: printMatrix(M)
+6: trace ← getTrace(M), norm ← getNormal(M) // trace stores the trace of the matrix, norm stores the normal of the matrix, returned by the function
+7: Print "Trace is ", trace, ".Normal is ", norm
+8: Stop
+
+			Procedure readMatrix (M)
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Enter row and column count:"
+	3: Read A→row, A→colm
+	4: If A→row < 1 OR A→colm < 1 then
+		4.1: Print "Error: Invalid size."
+		4.2: Stop
+	5: EndIf
+	6: For i=0 to less than M→row do // i is the loop counter for counting rows
+		6.1: For j=0 to less than M→colm do // j is the loop counter for counting column
+			6.1.1: Print "Element#", i+1, "-", j+1
+			6.1.2: Read M→data[i][j]
+			6.1.3: j ← j + 1
+		6.2: EndFor
+		6.3: i ← i + 1
+	7: EndFor
+8: End Procedure
+
+			Procedure printMatrix (M)
+		
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to less than M→row do
+		2.1: For j=0 to less than M→colm do
+			2.1.1: Print M→data[i][j]
+			2.1.2: j ← j + 1
+		2.2: EndFor
+		2.3: i ← i + 1
+	3: EndFor
+4: End Procedure
+
+			Procedure getTrace (M)
+// Trace is the sum of elements on the main diagonal
+
+Steps:-
+
+1: Begin Procedure
+	2: trace←0
+	3: For i=0 to less than M→row do
+		3.1: For j=0 to less than M→colm do
+			3.1.1: If i=j then
+				3.1.1.1: trace ←trace + M→data[i][j]
+			3.1.2: EndIf
+			3.1.3: j ← j + 1
+		3.2: EndFor
+		3.3: i ← i + 1
+	4: EndFor
+5: End Procedure
+
+			Procedure getNormal (M)
+// Normal is the square root of sum of all elements
+			
+Steps:-
+
+1: Begin Procedure
+	2: sum←0 // used to calculate sum of all elements of the matrix
+	3: For i=0 to less than M→row do
+		3.1: For j=0 to less than M→colm do
+			3.1.1: sum = sum + M→data[i][j]
+			3.1.2: j ← j + 1
+		3.2: EndFor
+		3.3: i ← i + 1
+	4: EndFor
+	5: norm ←sqrt(sum) // sqrt is a function that calculates the square root of a number
+	6: Return norm
+7: End Procedure

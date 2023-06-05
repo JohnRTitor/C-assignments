@@ -1,0 +1,50 @@
+		Algorithm (Binary Search)
+		
+Input:- Array size, list of elements, and the element to search
+Output:- Displays the position where it is first found, if not found indicates search is unsuccessful
+Data Structure:- One Dimensional Array
+
+Steps:
+
+1: Start
+2: Print "Enter the size"
+3: Read size
+4: If size < 1 then
+	4.1: Print "Invalid size."
+	4.2: Stop
+5: EndIf
+6: Print "ENter the array elements:"
+7: For i=0 to size-1 do
+	7.1: Read arr[i]
+	7.2: i←i + 1
+8: EndFor
+9: Print "Which element to find?"
+10: Read target
+11: result ← binarySearch(arr, 0, size-1, target) // call the binarySearch function and assign the returned value to result
+12: If result ≠ -1 then
+	12.1: Print target, "found at position #", result+1
+13: Else
+	13.1: Print target, "not found."
+14: EndIf
+15: Stop
+
+		Procedure binarySearch (arr, lower, upper, target)
+
+Steps:-
+
+// arr is the array base address, lower is lower bound of the array, upper is the upper bound, and target is the element to search for
+
+1: Begin Procedure
+	2: mid ← (lower+upper)/2 // finds the middle element's index
+	3: If lower ≤ upper then
+		3.1: If arr[mid] = target then // target found at mid index
+			3.1.1: Return mid
+		3.2: Else If arr[mid] < target then // divide from mid index, target must be in the right subarray
+			3.2.1: Return binarySearch(arr, mid+1, upper, target)
+		3.3: Else // target must be in the left subarray
+			3.3.1: Return binarySearch(arr, lower, mid-1, target)
+		3.4: EndIf
+	4: Else
+		4.1: Return -1 // the element has not been found at all
+	5: EndIf
+6: End Procedure

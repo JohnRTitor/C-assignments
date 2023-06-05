@@ -1,0 +1,134 @@
+				Algorithm - Infix to Prefix Conversion
+
+Input:- A valid infix expression
+Output:- Corresponding prefix expression
+Data Structure:- One Dimensional Array
+
+Steps:-
+
+1: Start
+2: Print "Enter an infix expression:"
+3: Read infix
+4: If not isValidExpression(infix) then
+	4.1: Print "Invalid infix expression."
+	4.2: Stop
+5: EndIf
+6: infixToPrefix(infix, prefix)
+7: Print "The prefix expression is: ", prefix
+8: Stop
+
+				Procedure push (stack, top, data)
+// pushes data onto top of a stack and updates top pointer
+
+Steps:-
+1: Begin Procedure
+	2: top ← top + 1
+	3: stack[top] ← data
+4: End Procedure
+
+				Procedure pop (stack, top)
+ // removes the top element of the stack indicated by the pointer top and returns it, also decreases top by one
+ 
+ Steps:-
+ 
+ 1: Begin Procedure
+ 	2: If top = -1 then
+ 		2.1: Return -1
+ 	3: EndIf
+ 	4: data ← stack[top]
+ 	5: top ← top - 1
+ 	6: Return data
+ 7: End Procedure
+
+
+				Procedure precedence (ch)
+// ch is the incoming character/operator to check the precedence of
+
+Steps:-
+
+1: Begin Procedure
+	2: Case ch = '+'
+		2.1: Return 1
+	3: EndCase
+	4: Case ch = '-'
+		4.1: Return 1
+	5: EndCase
+	6: Case ch = '*'
+		6.1: Return 2
+	7: EndCase
+	8: Case ch = '/'
+		8.1: Return 2
+	9: EndCase
+	10: Case ch = '^'
+		8.2: Return 3
+	11: EndCase
+	12: Case Default
+		12.1: Return -1
+	13: EndCase
+14: End Procedure
+
+				Procedure isValidExpression (expression)
+// expression is the incoming expression to check
+
+Steps:-
+
+1: Begin Procedure
+	2: top ← - 1, i ← 0
+	3: While i < len(expression) do // len function gets the length of the string
+		3.1: If isspace(expression[i]) then // skip all whitespace, isspace function checks whether the incoming character is a space
+			3.1.1: Continue
+		3.2: Else If isOperand(expression[i]) or isOperator(expression[i]) then // isOperator function checks the incoming character against valid operators such as + - * / and ^
+			3.2.1: Continue
+		3.3: Else If expression[i] = '(' then
+			3.3.1: push(stack, top, expression[i]) // push the opening parantheses to the stack
+		3.4: Else If expression[i] = ')' then
+			3.4.1: If (pop(stack, &top) == EOF) then // if stack there is no opening parantheses in the stack
+				3.4.1.1: Return false
+			3.4.2: EndIf
+		3.5: Else // there is an invalid unallowed character
+			3.5.1: Return false
+		3.6: EndIf
+		3.7: i ← i + 1
+	4: EndWhile
+	5: If top ≠ -1 then // if stack is not empty at this point
+		5.1: Return false
+	6: EndIf
+	7: Return true // if it reached this point, the expression must be valid
+8: End Procedure
+
+				Procedure infixToPrefix (infix, prefix)
+// infix is the input infix expression, prefix is where output prefix expression will be stored
+
+Steps:-
+
+1: Begin Procedure
+	2: top ← -1, i ← (len(infix) - 1), j ← 0
+	3: While i ≥ 0 do // traverse the infix expression from end to beginning
+		3.1: ch ← infix[i] // read a character from infix expression
+		3.2: If isOperand(ch) OR isspace(ch) then // operand or space is found, add to output string
+			3.2.1: prefix[j] ← ch
+			3.2.2: j ← j + 1
+		3.3: Else If ch = ')' then // closing parantheses is found, push into the stack
+			3.3.1: push(stack, top, ch)
+		3.4: Else If ch = '(' then
+			3.4.1: While stack[top] ≠ ')' do // pop all operators until ')' is found
+				3.4.1.1: pop(stack, top)
+			3.4.2: EndWhile
+			3.4.3: pop(stack, top) // pop the last ')' too
+		3.5: Else // operator is encountered
+			3.5.1: While top ≠ -1 AND precedence(ch) < precedence(stack[top]) do // pop operators in the stack until a lower priority operator found
+				3.5.1.1: prefix[j] = pop(stack, top)
+				3.5.1.2: j ← j + 1
+			3.5.2: EndWhile
+			3.5.3: push(stack, top, ch) // then push the operator at the end
+		3.6: EndIf
+		3.7: i ← i - 1
+	4: EndWhile
+
+	// The expression fully traversed but stack is not empty yet
+	5: While top ≠ -1 do
+		5.1: prefix[j] = pop(stack, top)
+		5.2: j ← j + 1
+	6: EndWhile
+	7: reverse(prefix) // reverse the output expression to get the final prefix expression
+8: End Procedure

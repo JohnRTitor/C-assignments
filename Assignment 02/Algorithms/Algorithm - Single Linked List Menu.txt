@@ -1,0 +1,276 @@
+				Algorithm (Menu - Insertion, Deletion, Searching, Reverse on Linked List)
+
+
+
+Input: Number of elements and list of elements, and option
+Output: As per user's option
+Data Structure: A singly linked list, where each NODE contains the data and link to next node
+
+Steps:-
+
+1: Start
+2: createList(head)
+3: If head→link = EMPTY then
+	3.1: Print "Error: List is empty."
+	3.2: Stop
+4: EndIf
+5: While (true) // infinite loop for menu
+	5.1: Print "** MENU **"
+	5.2: Print "1. Print List, 2. Reverse List, 3. Insert Node, 4. Delete Node 5. Search for an element in the list, 6. Exit Program"
+	5.3: Print "Enter your choice:"
+	5.4: Read option
+	5.5: Case option = 1
+		5.5.1: printList(head→link)
+	5.6: EndCase
+	5.7: Case option = 2
+		5.7.1: reverseList(head→link)
+		5.7.2: Print "Successfully reversed the list."
+	5.8: EndCase
+	5.9: Case option = 3
+		5.9.1: insertNode(head→link)
+	5.10: EndCase
+	5.11: Case option = 4
+		5.11.1: deleteNode(head→link)
+	5.12: EndCase
+	5.13: Case option = 5
+		5.13.1: Print "Which element to search?"
+		5.13.2: Read searchFor
+		5.13.3: position ← searchList(head→link)
+		5.13.4: If position ≠ -1 then // element found
+			5.13.4.1: Print searchFor, "found at position #", position
+		5.13.5: Else
+			5.13.5.1: Print searchFor, "not found in the list."
+		5.13.6: EndIf
+	5.14: EndCase
+	5.15: Case option = 6
+		5.15.1: Print "Program exited."
+		5.15.2: Exit Loop
+	5.16: EndCase
+	5.17: Case default
+		5.17.1: Print "Error: Invalid input. Please try again."
+	5.18: EndCase
+6: EndWhile
+7: Stop
+			
+				Procedure createNode (data)
+				
+// the function gets data externally to insert in each node
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← getNode(NODE)
+	3: If newNode = EMPTY then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return EMPTY/Exit Program
+	4: EndIf
+	5: newNode→info = data
+	6: newNode→link = EMPTY
+	7: Return newNode
+8: End Procedure
+
+
+				Procedure createList (head)
+
+// creates a list, here head is a variable to store the address of header node, called by reference
+
+Steps:-
+
+1: Begin Procedure
+	2: head ← createNode(0) // create empty header node
+	3: Print "How many nodes to create?"
+	4: Read size // this many nodes the linked list will contain
+	5: If size < 1 OR head = EMPTY then
+		5.1: Print "Error: Invalid size, List couldn't be made."
+		5.2: Return/End Procedure
+	6: EndIf
+	7: ptr ←head
+	8: For i=1 to size do // i is a loop counter
+		8.1: Print "Enter data for node#", i
+		8.2: Read data
+		8.3: ptr→link = createNode(data)
+		8.4: ptr = ptr→link
+	9: EndFor
+10: End Procedure
+
+
+				Procedure printList (head)
+
+// head variable stores the address of first node of a list
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: ptr←head // ptr is used to traverse through the list
+	5: While ptr ≠ NULL do
+		5.1: Print ptr→info
+		5.2: ptr = ptr→link
+	6: EndWhile
+7: End Procedure
+
+
+				Procedure getListLength (head)
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return 0
+	3: EndIf
+	4: count ← 0, ptr ← head
+	5: While ptr ≠ EMPTY do
+		5.1: count ← count + 1
+		5.2: ptr = ptr→link
+	6: EndWhile
+	7: Return count
+8: End Procedure
+
+
+				Procedure traverseToNode (head, position)
+
+// traverses to a node and returns the address of node
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return EMPTY
+	3: EndIf
+	4: ptr ← head, count ← 1 // positioning starts from 1
+	5: While ptr ≠ EMPTY AND count < position do
+		5.1: count ← count + 1
+		5.2: ptr = ptr→link
+	6: EndWhile
+	7: If count = position then
+		7.1: Return ptr
+	8: EndIf
+	9: Return NULL
+10: End Procedure
+
+				Procedure searchList (head, target)
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return -1
+	3: EndIf
+	4: ptr ← head
+	5: While ptr ≠ EMPTY do
+		5.1: If ptr→info = target then
+			5.1.1: Return count
+		5.2: count ← count + 1
+		5.3: ptr = ptr→link
+	6: EndWhile
+	8: Return -1
+9: End Procedure
+
+				Procedure insertNode (head)
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = NULL then
+		2.1: Print "Error: List is empty."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: length ← getListLength(head)
+	5: Print "1. First node insertion, ", (length+1), ". Last node insetion, ", "Or just enter the position of your choice. Range 1 to", length
+	6: Read option
+	7: If length < 1 OR option < 1 OR option > length+1 then
+		7.1: Print "Error: Invalid position entered."
+		7.2: Return/End Procedure
+	8: EndIf
+	9: position ← option
+	10: Print "Enter the element to insert:"
+	11: Read insertThis
+	12: If position = 1 then // first node insertion
+		12.1: ptr ← createNode(insertThis)
+		12.2: ptr→link = head
+		12.3: head ← ptr
+	13: Else If position = length+1 then // last node insertion
+		13.1: ptr ← traverseToNode(head, length)
+		13.2: ptr→link = createNode(insertThis)
+		13.3: (ptr→link)→link = NULL
+	14: Else // any position insertion
+		14.1: ptr←traverseToNode(head, position-1) // traverse to the node before the desired position
+		14.2: temp = ptr→link
+		14.3: ptr→link = createNode(insertThis)
+		14.4: (ptr→link)→link = temp
+	15: EndIf
+	16: Print insertThis, "successfully inserted at the position#", position
+17: End Procedure
+
+				Procedure deleteNode (head)
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = NULL then
+		2.1: Print "Error: List is empty."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: length ← getListLength(head)
+	5: Print "0. Search by value, ", "1. Delete first node", length, ". Delete last node", "Or just enter the position of your choice: Range 1 to", length
+	6: Read option
+	7: If length < 1 OR option < 0 OR option > length then // input and error checking
+		7.1: Print "Error: Node in said position couldn't be deleted."
+		7.2: Return/End Procedure
+	8: Else If option = 0 then // user chooses to search by value
+		8.1: Print "Enter value to search for: This only deletes the first occurance"
+		8.2: Read searchFor
+		8.3: position ← searchList(head, searchFor)
+		8.4: If position ≠ -1 then
+			8.4.1: Print searchFor, " found at position#", position
+		8.5: Else
+			8.5.1: Print "Not found, so couldn't be deleted."
+			8.5.2: Return/End Procedure
+		8.6: EndIf
+	9: Else
+		9.1: position ← option
+	10: EndIf
+	// position has been found by search or user entered a valid position
+	11: If position = 1 then // first node deletion
+		11.1: ptr ← head
+		11.2: head = head→link
+		11.3: ReturnNode(ptr)
+	12: Else If position = length then // last node deletion
+		12.1: ptr ← traverseToNode(head, length-1) // traverse to the node before the position
+		12.2: ReturnNode(ptr→link)
+		12.3: ptr→link = EMPTY
+	13: Else // any position deletion
+		13.1: ptr ← traverseToNode(head, position - 1)
+		13.2: temp = ptr→link
+		13.3: ptr→link = (ptr→link)→link
+		13.4: ReturnNode(temp)
+	14: EndIf
+	15: Print "Node successfully deleted."
+16: End Procedure
+
+
+				Procedure reverseList (head)
+
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: current ← head
+	5: prev ← EMPTY, next ← EMPTY
+	6: While current ≠ EMPTY do
+		6.1: next = current→link // store the next node
+		6.2: current→link = prev // reverse the link
+		6.3: prev ← current, current ← next // move to the next nodes
+	7: EndWhile
+	8: head ← prev
+9: End Procedure	

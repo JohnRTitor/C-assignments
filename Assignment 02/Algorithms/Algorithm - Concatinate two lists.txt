@@ -1,0 +1,103 @@
+				Algorithm (Concatinate a list to another)
+
+Input: Size and elements for two linked lists
+Output: Displays the concatinated list
+Data Structure: Singly Linked List, where each NODE contains data and link to next node
+
+Steps:-
+
+1: Start
+// during creation, empty header node is created for each list which contains the address of first node
+2: Print "Enter List#1"
+3: createList(head1)
+4: Print "Enter List#2"
+5: createList(head2)
+6: Print "Before concatination: List #1 is "
+7: printList(head1→link)
+8: Print "List#2 is "
+9: printList(head2→link)
+10: Print "After concatinating List#2 to List#1, List#1 is:"
+11: listCat(head1→link, head2→link) // concatinate two lists
+12: printList(head1)
+13: ReturnNode(head2)
+14: Stop
+
+				Procedure createNode (data)
+				
+// the function gets data externally to insert in each node
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← getNode(NODE)
+	3: If newNode = EMPTY then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return EMPTY/Exit Program
+	4: EndIf
+	5: newNode→info = data
+	6: newNode→link = EMPTY
+	7: Return newNode
+8: End Procedure
+
+
+				Procedure createList (head)
+
+// creates a list, here head is a variable to store the address of header node, called by reference
+
+Steps:-
+
+1: Begin Procedure
+	2: head ← createNode(0) // create empty header node
+	3: Print "How many nodes to create?"
+	4: Read size // this many nodes the linked list will contain
+	5: If size < 1 OR head = EMPTY then
+		5.1: Print "Error: Invalid size, List couldn't be made."
+		5.2: Return/End Procedure
+	6: EndIf
+	7: ptr ←head
+	8: For i=1 to size do // i is a loop counter
+		8.1: Print "Enter data for node#", i
+		8.2: Read data
+		8.3: ptr→link = createNode(data)
+		8.4: ptr = ptr→link
+	9: EndFor
+10: End Procedure
+
+
+				Procedure printList (head)
+
+// head variable stores the address of first node of a list
+
+Steps:-
+
+1: Begin Procedure
+	2: If head = EMPTY then
+		2.1: Print "Error: List is empty."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: ptr←head // ptr is used to traverse through the list
+	5: While ptr ≠ NULL do
+		5.1: Print ptr→info
+		5.2: ptr = ptr→link
+	6: EndWhile
+7: End Procedure
+
+
+				Procedure listCat (head1, head2)
+
+// head1, head2 are variables that store the address of first node of List1 and List2 respectively
+
+Steps:-
+
+1: Begin Procedure
+	2: If head1 = EMPTY OR head2 = EMPTY
+		2.1: Print "Error: List#2 could not be appended to List#1."
+		2.2: Return/End Procedure
+	3: EndIf
+	4: ptr ←head1
+	5: While ptr→link ≠ EMPTY do
+		5.1: ptr = ptr→link
+	6: EndWhile
+	// ptr is now at the tail node of list1
+	7: ptr→link = head2 // append list2
+8: End Procedure

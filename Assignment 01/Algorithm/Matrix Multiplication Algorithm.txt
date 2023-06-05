@@ -1,0 +1,88 @@
+			Algorithm (Multiply two matrices)
+		
+Input: Two matrices and corresponding row and column count
+Output: Display the result of matrix multiplication, else display an error message
+Data Structure: Matrix type structure, with members row, colm, and a two dimensional array 'data' containing matrix elements
+
+// A, B, product are a matrix type structure
+
+Steps:-
+
+1: Start
+2: Print "Enter matrix A:"
+3: readMatrix(A) // pass A matrix's address to the readMatrix function
+4: Print "Enter matrix B:"
+5: readMatrix(B) // pass B matrix's address
+6: status ←multiplyMatrix(A, B, product) // assign the returned value to status
+7: If status = 1 then // multiplication is successful
+	7.1: Print "Matrix A:"
+	7.2: printMatrix(A)
+	7.3: Print "Matrix B:"
+	7.4: printMatrix(B)
+	7.5: Print "Multiplication is successful. The result is below:"
+	7.6: printMatrix(product)
+8: Else // unsuccessful
+	8.1: Print "Error. Multiplication is unsuccessful. A→column should be equal to B→row."
+9: EndIf
+10: Stop
+
+
+			Procedure readMatrix (M)
+// M is a matrix type structure
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Enter row and column count:"
+	3: Read A→row, A→colm
+	4: If A→row < 1 OR A→colm < 1 then
+		4.1: Print "Error: Invalid size."
+		4.2: Stop
+	5: EndIf
+	6: For i=0 to less than M→row do // i is the loop counter for counting rows
+		6.1: For j=0 to less than M→colm do // j is the loop counter for counting column
+			6.1.1: Print "Element#", i+1, "-", j+1
+			6.1.2: Read M→data[i][j]
+			6.1.3: j ← j + 1
+		6.2: EndFor
+		6.3: i ← i + 1
+	7: EndFor
+8: End Procedure
+
+			Procedure printMatrix (M)
+		
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to less than M→row do
+		2.1: For j=0 to less than M→colm do
+			2.1.1: Print M→data[i][j]
+			2.1.2: j ← j + 1
+		2.2: EndFor
+		2.3: i ← i + 1
+	3: EndFor
+4: End Procedure
+
+			Procedure multiplyMatrix(A, B, product)
+		
+Steps:-
+
+1: Begin Procedure
+	2: If A→colm ≠ B→row then
+		2.1: Return 0
+		2.2: End Procedure
+	3: EndIf
+	4: product→row = A→row, product→colm = B→colm
+	5: For i=0 to less than product→row do
+		5.1: For j=0 to less than product→colm do
+			5.1.1: product→data[i][j] = 0
+			5.1.2: For k=0 to less than A→colm do
+				5.1.2.1: product→data[i][j] = product→data[i][j] + A→data[i][k] × B→data.[k][j] // multiplication is done by dot product of corresponding row of A and  corresponding column of B
+				5.1.2.2: k ← k + 1
+			5.1.3: EndFor
+			5.1.4: j ← j + 1
+		5.2: EndFor
+		5.3: i ← i + 1
+	6: EndFor
+	7: Return 1
+8: End Procedure

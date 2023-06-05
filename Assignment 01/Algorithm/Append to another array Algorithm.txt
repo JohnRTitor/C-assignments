@@ -1,0 +1,42 @@
+		Algorithm (Append one array to another)
+		
+Input:- Size and list of elements for two seperate array, from user
+Output:- Display the merged array
+Data Structure:- One dimensional array
+
+Steps:-
+
+1: Start
+2: Print "Enter the size for array1 and then array2:"
+3: Read arrSize, brrSize // arrSize and brrSize hold size count for array1 and array2 respectively
+4: If arrSize < 1 OR brrSize < 1 then
+	4.1: Print "Please enter a valid size!"
+	4.2: Stop
+5: EndIf
+6: Print "Enter array#1 elements:"
+7: For i=0 to arrSize-1 do // i is the loop counter for arr array
+	7.1: Read arr[i]
+	7.2: i←i + 1
+8: EndFor
+9: Print "Enter array#2 elements:"
+10: For j=0 to brrSize-1 do // j is the loop counter for brr array
+	10.1: Read brr[j]
+	10.2: j←j + 1
+11: EndFor
+12: mergedSize ← arrSize + brrSize, i←0, j←0 // mergedSize is the total size for new mergedArr
+13: For k=0 to mergedSize-1 do // k is the loop counter for new mergedArr
+	13.1: If k < arrSize then
+		13.1.1: mergedArr[k] ← arr[i]
+		13.1.2: i←i + 1
+	13.2: Else
+		13.2.1: mergedArr[k] ← brr[j]
+		13.2.2: j←j + 1
+	13.3: EndIf
+	13.4: k←k + 1
+14: EndFor
+15: Print "The two arrays got successfully merged. The result is shown below:"
+16: For k=0 to mergedSize-1 do
+	16.1: Print mergedArr[k]
+	16.2: k←k + 1
+17: EndFor
+18: Stop

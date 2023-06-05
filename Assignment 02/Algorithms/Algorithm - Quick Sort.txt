@@ -1,0 +1,128 @@
+				Algorithm (Quick Sort)
+				
+Input: Array size and list of elements
+Output: Sorted array
+Data Structure: One Dimensional Array
+
+Steps:-
+
+1: Start
+2: size ← readArray(arr) // pass array base address and return size
+3: Print "Before Sorting:"
+4: printArray(arr, size)	
+5: Print "After Sorting:"
+6: quickSort (arr, 0, size-1) // quickSort is called using lower and upper bounds of the array
+7: printArray(arr, size)
+8: Stop
+
+
+				Procedure readArray (arr)
+				
+// arr is array base address, returns size
+
+Steps:-
+
+1: Begin Procedure
+	2: Print "Enter the size:"
+	3: Read size
+	4: If size < 1 then
+		4.1: Print "Invalid size."
+		4.2: Return -1
+		4.3: End Procedure
+	5: EndIf
+	6: For i=0 to size-1 do
+		6.1: Read arr[i]
+	7: EndFor
+	8: Return size
+9: End Procedure
+
+
+			Procedure printProcedure (arr, size)
+
+// arr is array base address and size holds the no of elements of the array
+	
+Steps:-
+
+1: Begin Procedure
+	2: For i=0 to size-1 do
+		2.1: Print arr[i]
+	3: EndFor
+4: End Procedure
+
+
+				Procedure swap (x, y)
+
+// Swaps two numbers
+								
+Steps:-
+
+1: Begin Procedure
+	2: temp←x // temp is a temporary variable to hold the 1st number
+	3: x←y
+	4: y←temp
+5: End Procedure
+
+				Procedure quickSort (arr, lower, upper)
+// lower and upper are the lower and upper bound of the list
+// after each pass, array is partitioned from pivotIndex
+// then run quickSort again on the two subarrays
+				
+Steps:-
+
+1: Begin Procedure
+	2: If lower < upper then
+		2.1: pivotIndex = partition(arr, lower, upper) // pivot's proper positon found
+		2.2: quickSort (arr, lower, pivotIndex-1)
+		2.3: quickSort (arr, pivotIndex+1, upper)
+	3: EndIf
+4: End Procedure
+
+				Procedure partition (arr, lower, upper)
+
+// selects the pivot using median of three technique
+// Partitions the array in a way so that all elements lesser than pivot are in the left and all elements greater are in the right side
+// after each pass, pivot gets its proper position, and returns the position
+
+Steps:-
+
+1: Begin Procedure
+	2: pivot ← medianOfThree(arr, lower, upper) // pivot is found and moved at the beginning
+	3: p ← lower, q ← upper + 1 // p, q are used to traverse the array, p moves to the right, q moves to the left
+	4: While p ≤ q do // until q crosses p
+		4.1: While arr[p] < pivot do // until an element greater than pivot found
+			4.1.1: p ← p + 1
+		4.2: EndWhile
+		4.3: While arr[q] > pivot do // until an element lesser than pivot found
+			4.3.1: q ← q - 1
+		4.4: EndWhile
+		4.5: If p < q then // if q still hasn't crossed p
+			4.5.1: swap(arr[p], arr[q])
+		4.6: EndIf
+	5: EndWhile
+	6: swap(arr[lower], arr[q]) // move pivot to its proper position
+	7: Return q // return q, which is the proper position
+8: End Procedure
+
+
+				Procedure medianOfThree (arr, lower, upper)
+
+// for a subarray, chooses the median from first, middle and last element as pivot, then moves it to the front of the sublist
+// returns the pivot element
+
+Steps:-
+
+1: Begin Procedure
+	2: mid ← (lower + upper)/2
+	3: If (arr[lower] > arr[mid]) EXOR (arr[lower] > arr[mid]) then
+		3.1: pivotIndex←lower
+	4: Else If (arr[mid] < arr[lower]) EXOR (arr[mid] < arr[upper]) then
+		4.1: pivotIndex←mid
+	5: Else
+		5.1: pivotIndex ←upper
+	6: EndIf
+	// after the median is found, move it to the beginning of the list, if not already there
+	7: If pivotIndex ≠ lower then
+		7.1: swap(arr[lower], arr[pivotIndex])
+	8: EndIf
+	9: Return arr[lower]
+10: End Procedure
