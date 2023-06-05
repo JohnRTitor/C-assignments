@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <limits.h>
-#pragma GCC diagnostic ignored "-Wgnu-statement-expression"
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+// WIP
 
 #define IS_INVALID_OPTION(x) (x == 1 || x == 2 || x == 8 || x == 9 || x == 10)
 #define IS_EMPTY(root) \
