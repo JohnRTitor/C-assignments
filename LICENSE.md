@@ -1,6 +1,6 @@
 # Academic Free License v3.0
 
-Software/source codes in the repository is licensed under the terms of the Academic Free License v3.0 ("License"). You should have received a copy of this license along with the software. If not, please visit the [license website](https://opensource.org/licenses/AFL-3.0) to obtain a copy.
+This software is licensed under the terms of the Academic Free License v3.0 ("License"). You should have received a copy of this license along with the software. If not, please visit the [license website](https://opensource.org/licenses/AFL-3.0) to obtain a copy.
 
 ## Permissions
 
