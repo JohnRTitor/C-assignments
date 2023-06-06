@@ -26,9 +26,9 @@ typedef struct stackNode
 
 				Algorithm Menu - Binary Search Tree using Linked List
 				
-Input:-
-Output:-
-Data Structure:-
+Input:- As per user's option
+Output:- As per user's option
+Data Structure:- Double Linked List where each node contains the data (info), link to the left and right child
 
 Steps:-
 
@@ -244,9 +244,10 @@ Steps:-
 	5: Return current // return the right most node which is the maximum valued node
 6: End Procedure
 
-				Procedure insertNodeRecursive (NODE *root, int data) // inserts a node, no duplicate element allowed
+				Procedure insertNodeRecursive (root, data)
 
-// inserts node and returns the address of the root
+// inserts a node, no duplicate element allowed, returns the address of the root
+// root is the pointer to the root node, data is the data to insert
 
 Steps:-
 
@@ -262,6 +263,9 @@ Steps:-
 7: End Procedure
 
 				Procedure deleteNodeRecursive (root, data)
+
+// deletes a node and returns the address of the root
+// root is the pointer to the root node, data is the data to delete
 
 Steps:-
 
@@ -280,93 +284,118 @@ Steps:-
 		5.2: Else If root→right = NULL // there is no right child
 			5.2.1: temp ← root→left
 			5.2.2: ReturnNode(root) // delete root
-			5.2.3: return temp; // return the left subtree, so that it becomes the root
+			5.2.3: return temp // return the left subtree, so that it becomes the root
 		5.3: EndIf
 		5.4: temp ← findMin(root→right) // get the node with the minimum value from the right subtree
-		root->info = temp->info; // delete the root's data
-		root->right = deleteNodeRecursive(root->right, temp->info); // delete the temp node since it has been moved up to root
-	}
-	return root;
-}
+		5.5: root→info ← temp→info // delete the root's data
+		5.6: root→right ← deleteNodeRecursive(root→right, temp→info) // recursively delete the temp node since it has been moved up to root
+	6: EndIf
+	7: Return root // return the address of new root node
+8: End Procedure
 
-void inorderRecursive (NODE *root)
-{
-	if (root != NULL)
-	{
-		inorderRecursive(root->left);
-		printf("%d, ", root->info);
-		inorderRecursive(root->right);
-	}
-}
+				Procedure inorderRecursive (root)
 
-void preorderRecursive (NODE *root)
-{
-	if (root != NULL)
-	{
-		printf("%d, ", root->info);
-		preorderRecursive(root->left);
-		preorderRecursive(root->right);
-	}
-}
+// Inorder traverses a tree recursively
+// root is the pointer to the root node
 
-void postorderRecursive (NODE *root)
-{
-	if (root != NULL)
-	{
-		postorderRecursive(root->left);
-		postorderRecursive(root->right);
-		printf("%d, ", root->info);
-	}
-}
+Steps:-
 
-void freeTree (NODE **root)
-{
-    if (*root != NULL)
-    {
-        freeTree( &((*root)->left) );
-        freeTree( &((*root)->right) );
-        free(*root);
-        *root = NULL;
-    }
-}
+1: Start
+	2: If root ≠ NULL then // tree is not empty
+		2.1: inorderRecursive(root→left) // recursively traverse the left subtree
+		2.2: Print root→info // print the root's data
+		2.3: inorderRecursive(root→right) // recursively traverse the right subtree
+	3: EndIf
+4: End Procedure
 
-void searchNode (NODE *root, int target, NODE **par, NODE **loc) // uses iteration to find the target, modifies loc to contain the address of target node and par to contain the address of its parent
-{
-	NODE *save, *ptr;
-	if (root == NULL) // tree is empty
-	{
-		*par = NULL;
-		*loc = NULL;
-		return;
-	}
-	if (target == root->info)
-	{
-		*par = NULL;
-		*loc = root;
-		return;
-	}
+				Procedure preorderRecursive (root)
+
+// Preorder traverses a tree recursively
+// root is the pointer to the root node
+
+Steps:-
+
+1: Begin Procedure
+	2: If root ≠ NULL then // tree is not empty
+		2.1: Print root→info // print the root's data
+		2.2: preorderRecursive(root→left) // recursively traverse the left subtree
+		2.3: preorderRecursive(root→right) // recursively traverse the right subtree
+	3: EndIf
+4: End Procedure
+
+				Procedure postorderRecursive (root)
+
+// Postorder traverses a tree recursively
+// root is the pointer to the root node
+
+Steps:-
+
+1: Begin Procedure
+	2: If root ≠ NULL then // tree is not empty
+		2.1: postorderRecursive(root→left) // recursively traverse the left subtree
+		2.2: postorderRecursive(root→right) // recursively traverse the right subtree
+		2.3: Print root→info // print the root's data
+	3: EndIf
+4: End Procedure
+
+				Procedure eraseTree (root)
+Steps:-
+
+1: Begin Procedure
+    2: If root ≠ NULL then // tree is not empty
+        2.1: eraseTree(root→left) // recursively erase the left subtree
+        2.2: eraseTree(root→right) // recursively erase the right subtree
+        2.3: ReturnNode(root) // deletes the root node
+        2.4: root = NULL
+    3: EndIf
+4: End Procedure
+
+				Procedure searchNode (root, target, par, loc)
+
+// uses iterative approach to find the target, modifies loc to contain the address of target node and par to contain the address of its parent
+// root is the pointer to the root node
+
+Steps:-
+1: Begin Procedure
+	2: If root = NULL then // tree is empty
+		2.1: par ← NULL
+		2.2: loc ← NULL
+		2.3: Return
+	3: EndIf
+	4: If target = root→info then // if target is in the root node
+		4.1: par ← NULL
+		4.2: loc ← root
+		4.3: Return
+	5: EndIf
 	// initialise save and ptr pointers which will be used to traverse
-	save = root;
+	6: save ← root
 	// if target is less than root element, the target must be in the left subtree
+	7: If target < root→info then
+		7.1: ptr = root→left
 	// else it would be in the right subtree
-	ptr = (target < root->info) ? root->left : root->right;
+	8: Else
+		8.1: ptr ← root→right
+	9: EndIf
 	// use a loop to search the tree
-	while (ptr != NULL)
-	{
-		if (target == ptr->info)
-		{
-			*par = save;
-			*loc = ptr;
-			return;
-		}
+	10: While ptr ≠ NULL do
+		10.1: If target = ptr→info then
+			10.1.1: par ← save
+			10.1.2: loc ← ptr
+			10.1.3: Return
+		10.2: EndIf
 		// traverse further into the tree
-		save = ptr;
-		ptr = (target < ptr->info) ? ptr->left : ptr->right;
-	}
+		// increment ptr and save
+		10.3: save ← ptr
+		10.4: If target < ptr→info then
+			10.4.1: ptr ← ptr→left
+		10.5: Else
+			10.5.1: ptr ← ptr→right
+		10.6: EndIf
+	11: EndWhile
 	// we reach here when the search is unsuccessful
-	*par = save;
-	*loc = NULL;
-}
+	12: par ← save
+	13: loc ← NULL
+14: End Procedure
 
 void insertNodeIterative (NODE **root, int data)
 {
