@@ -397,7 +397,7 @@ Steps:-
 	13: loc ← NULL
 14: End Procedure
 
-void insertNodeIterative (NODE **root, int data)
+Procedure insertNodeIterative (NODE **root, int data)
 {
 	NODE *par, *loc;
 	// search the element first
