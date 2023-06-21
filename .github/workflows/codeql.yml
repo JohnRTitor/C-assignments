@@ -1,56 +1,49 @@
-# For most projects, this workflow file will not need changing; you simply need
-# to commit it to your repository.
-#
-# You may wish to alter this file to override the set of languages analyzed,
-# or to provide custom queries or build logic.
-#
-# ******** NOTE ********
-# We have attempted to detect the languages in your repository. Please check
-# the `language` matrix defined below to confirm you have the correct set of
-# supported CodeQL languages.
-# 
-name: "CodeQL"
+name: CodeQL Analysis
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: '39 15 * * 3'
+    branches:
+      - main
 
 jobs:
-  analyze:
-    name: Analyze
+  build:
+    name: Build and Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 360
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup CodeQL
-      uses: github/codeql-action/setup-codeql@v1
-      with:
-        codeql-version: 'latest'
+      - name: Set up CodeQL
+        uses: github/codeql-action/setup@v1
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: 'cpp'
-        queries: security-extended,security-and-quality
-        # Specify any additional custom queries here
+      - name: Build and Analyze C files
+        run: |
+          # Get the list of C files in the repository
+          c_files=$(find . -name '*.c')
 
-    - name: Build and Analyze
-      run: |
-        find . -name "*.c" -type f | while read file; do
-          echo "Building $file"
-          gcc "$file" -o "${file%.c}"
-          echo "Analyzing $file"
-          codeql database create --language=cpp --source-root=. --command="${file%.c}"
-          codeql database analyze --format=sarif-latest --output="${file%.c}.sarif" "${file%.c}"
-        done
+          # Create a directory to store analysis results
+          mkdir analysis_results
+
+          # Build and analyze each C file individually
+          for file in $c_files; do
+            # Extract the filename without extension
+            filename=$(basename -- "$file")
+            filename="${filename%.*}"
+
+            # Build the file using the appropriate compiler
+            gcc -o "$filename" "$file"
+
+            # Analyze the file and generate SARIF results
+            codeql database create --language=cpp --source-root="$filename" --source-root=.
+
+            codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
+
+            # Clean up the database after analysis
+            codeql database remove "$filename"
+          done
+
+      - name: Upload analysis results
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: analysis_results/*.sarif
