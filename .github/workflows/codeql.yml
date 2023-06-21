@@ -29,11 +29,6 @@ jobs:
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'cpp' ]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -41,16 +36,16 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: ${{ matrix.language }}
+        languages: 'cpp'
+        queries: security-extended,security-and-quality
+        # Specify any additional custom queries here
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        # Exclude files that are not .c files
-        queries: security-and-quality
-        additional-args: |
-          -D language=cpp
-          -D excludePaths='["!**/*.c"]'
+    - name: Build and Analyze
+      run: |
+        find . -name "*.c" -type f | while read file; do
+          echo "Building $file"
+          gcc "$file" -o "${file%.c}"
+          echo "Analyzing $file"
+          codeql database create --language=cpp --source-root=. --command="${file%.c}"
+          codeql database analyze --format=sarif-latest --output="${file%.c}.sarif" "${file%.c}"
+        done
