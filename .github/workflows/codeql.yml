@@ -8,7 +8,7 @@
 # We have attempted to detect the languages in your repository. Please check
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
-#
+# 
 name: "CodeQL"
 
 on:
@@ -32,6 +32,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Setup CodeQL
+      uses: github/codeql-action/setup-codeql@v1
+      with:
+        codeql-version: 'latest'
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
