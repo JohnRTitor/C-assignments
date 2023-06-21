@@ -72,7 +72,7 @@ jobs:
     #     ./location_of_script_within_repo/buildscript.sh
     - name: Build and Analyze C files
         run: |
-        # Get the list of C files in the repository
+          # Get the list of C files in the repository
           c_files=$(find . -name '*.c')
 
           # Create a directory to store analysis results
