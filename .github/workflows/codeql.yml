@@ -51,6 +51,12 @@ jobs:
       #   If the Autobuild fails above, remove it and uncomment the following three lines.
       #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
 
+      - name: Install CodeQL CLI
+        run: |
+          # Install CodeQL CLI
+          curl -L https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql.zip -o codeql.zip
+          unzip codeql.zip -d codeql-cli
+          echo "export PATH=\$PATH:$PWD/codeql-cli/codeql" >> $GITHUB_ENV
 
       - name: Build and Analyze C files
         run: |
