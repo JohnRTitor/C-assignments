@@ -64,6 +64,9 @@ jobs:
           mkdir analysis_results
 
           # Build and analyze each C file individually
+          # temporary set IFS to newline to correctly handle file names with spaces
+          IFS=$'\n'
+
           for file in $c_files; do
             # Extract the filename without extension
             filename=$(basename -- "$file")
@@ -81,6 +84,8 @@ jobs:
             # Clean up the database after analysis
             codeql database remove "$filename"
           done
+          # restore IFS
+          unset IFS
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
