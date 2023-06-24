@@ -397,280 +397,342 @@ Steps:-
 	13: loc ← NULL
 14: End Procedure
 
-Procedure insertNodeIterative (NODE **root, int data)
-{
-	NODE *par, *loc;
-	// search the element first
-	searchNode(*root, data, &par, &loc);
-	if (loc != NULL) // the data already exists, can't be inserted again
-		return;
-	loc = createNode(data); // else, create a new node with the provided data
-	if (par == NULL) // this means, the tree is empty
-		*root = loc; // so new node must become the root
-	else if (data < par->info)
-		par->left = loc;
-	else
-		par->right = loc;
-}
-void deleteNodeIterative (NODE **root, int target)
-{
-	NODE *par, *loc;
-	searchNode(*root, target, &par, &loc);
-	if (loc == NULL)
-	{
-		fprintf(stderr, "Target data (%d) not in tree, so it couldn't be deleted.", target);
-		return;
-	}
-	if (loc->left != NULL && loc->left != NULL) // both child exists
-		deleteParentOfTwo(root, &par, &loc);
-	else // single or no child
-		deleteSingleParent(root, &par, &loc);
-}
+				Procedure insertNodeIterative (root, data)
 
-void deleteSingleParent (NODE **root, NODE **par, NODE **loc)
-{
+Steps:-
+
+1: Begin Procedure
+	2: searchNode(root, data, par, loc) // search the element first
+	3: If loc ≠ NULL then // the data already exists, can't be inserted again
+		3.1: Return
+	4: EndIf
+	5: loc ← createNode(data) // else, create a new node with the provided data
+	6: If par = NULL then // this means, the tree is empty
+		6.1: root ← loc // so new node must become the root
+	7: Else If data < par→info then
+		7.1: par→left ← loc
+	8: Else
+		8.1: par→right ← loc
+	9: EndIf
+10: End Procedure
+
+				Procedure deleteNodeIterative (root, target)
+
+Steps:-
+
+1: Begin Procedure
+	2: searchNode(root, target, par, loc)
+	3: If loc = NULL then
+		3.1: Print target, " not in tree, so it couldn't be deleted."
+		3.2: Return
+	4: EndIf
+	5: If loc→left ≠ NULL && loc→left ≠ NULL then // both child exists
+		5.1: deleteParentOfTwo(root, par, loc)
+	6: Else // single or no child
+		6.1: deleteSingleParent(root, par, loc)
+	7: EndIf
+8: End Procedure
+
+				Procedure deleteSingleParent (root, par, loc)
+
+Steps:-
+1: Begin Procedure
 	// loc is the node to be deleted, "child" is the child of loc
-	NODE *child;
-	if ((*loc)->left == NULL && (*loc)->right == NULL) // loc is childless
-		child = NULL;
-	else if ((*loc)->left != NULL) // left child exists
-		child = (*loc)->left;
-	else // right child exists
-		child = (*loc)->right;
-	if (*par != NULL)
-	{
-		if (*loc == (*par)->left) // if loc is parent's left child
-			(*par)->left = child; // parent inherits loc's only child as its left child
-		else // else loc must be parent's right child
-			(*par)->right = child; // parent inherits loc's only child as its  right child
-	}
-	else // loc was the root node, so delete the root
-		*root = child;
-	free(*loc); // finally delete loc
-}
+	2: If loc→left = NULL AND loc→right = NULL then // loc is childless
+		child ← NULL
+	3: Else If loc→left ≠ NULL then // left child exists
+		3.1: child ← loc→left
+	4: Else // right child exists
+		4.1: child ← loc→right
+	5: EndIf
+	6: If par ≠ NULL then // parent exists
+		6.1: If loc = par→left then // if loc is parent's left child
+			6.1.1: par→left ← child // parent inherits loc's only child as its left child
+		6.2: Else // else loc must be parent's right child
+			6.2.1: par→right ← child // parent inherits loc's only child as its  right child
+	7: Else // loc was the root node, so delete the root
+		7.1: root ← child
+	8: EndIf
+	9: ReturnNode(loc) // finally delete loc
+10: End Procedure
 
-void deleteParentOfTwo (NODE **root, NODE **par, NODE **loc)
-{
+				Procedure deleteParentOfTwo (root, par, loc)
+
+Steps:-
+
+1: Begin Procedure
 	// Find the inorder successor of loc, by going to the left most node of right subtree of loc
-	NODE *parsuc = *loc;
-	NODE *suc = (*loc)->right;
-	while (suc->left != NULL)
-	{
-		parsuc = suc;
-		suc = suc->left;
-	}
-	(*loc)->info = suc->info; // replace loc's data with its inorder successor, effectively deleting the node
-	deleteSingleParent(root, &parsuc, &suc); // delete the inorder successor leaf node
-}
+	2: parsuc ← loc
+	3: suc ← loc→right
+	4: While suc→left ≠ NULL do
+		4.1: parsuc ← suc
+		4.2: suc ← suc→left
+	5: EndWhile
+	6: loc→info ← suc→info // replace loc's data with its inorder successor, effectively deleting the node
+	7: deleteSingleParent(root, parsuc, suc) // delete the inorder successor leaf node
+8: EndProcedure
 
-void push (SNODE **top, NODE *tNode)
-{
-	SNODE *newSNode = (SNODE *)malloc(sizeof(SNODE));
-	if (newSNode == NULL)
-	{
-		fprintf(stderr, "Error: Memory not allocated.");
-		exit(-1);
-	}
-	newSNode->treeNode = tNode;
-	newSNode->link = *top;
-	*top = newSNode;
-}
+					Procedure push (top, tNode)
 
-NODE* pop (SNODE **top)
-{
-	SNODE *temp;
-	NODE *popped;
-	if (*top == NULL)
-		return NULL;
-	temp = *top;
-	popped = temp->treeNode;
-	*top = (*top)->link;
-	free(temp);
-	return popped;
-}
+Steps:-
 
-NODE* peek (SNODE *top)
-{
-	return top->treeNode;
-}
+1: Begin Procedure
+	2: newSNode ←getNode(SNODE)
+	3: newSNode→treeNode ← tNode
+	4: newSNode→link ← top
+	5: top ← newSNode
+6: End Procedure
 
-int isStackEmpty(SNODE *top)
-{
-	return (top == NULL);
-}
+				Procedure pop (top)
+
+Steps:-
+
+1: Begin Procedure
+	2: If top = NULL then
+		return NULL
+	3: temp ← top
+	3: popped ← temp→treeNode
+	4: top ← top→link
+	5: ReturnNode(temp)
+	6: Return popped
+7: End Procedure
+
+				Procedure peek (top)
+
+Steps:-
+
+1: Begin Procedure
+	2: If top = NULL then
+		2.1: Return NULL
+	3: EndIf
+	4: Return top→treeNode
+5: End Procedure
+
+				Procedure isStackEmpty (top)
+
+Steps:-
+
+1: Begin Procedure
+	2: If top = NULL then
+		2.1: Return true
+	3: Else
+		3.1: Return false
+	4: EndIf
+5: End Procedure
 
 // Left Subtree, Root, Right Subtree
-void inorderIterative (NODE *root)
-{
-	NODE *current;
-	SNODE *top = NULL; // stack is initially NULL
-	if (root == NULL) // tree is empty, so exit the function
-		return;
-	current = root;
-	while (current != NULL || !isStackEmpty(top))
-	{
-		while (current != NULL) // keep pushing the left nodes into the stack
-		{
-			push(&top, current);
-			current = current->left;
-		}
-		current = pop(&top); // pop a node from the stack
-		printf("%d, ", current->info); // and print it
-		current = current->right; // move to the right subtree
-	}
-}
+				Procedure inorderIterative (root)
+
+Steps:-
+
+1: Begin Procedure
+	2: top ← NULL // stack is initially NULL
+	3: If root = NULL then // tree is empty, so exit the function
+		3.1: Return
+	4: EndIf
+	5: current ← root
+	6: While current ≠ NULL OR isStackEmpty(top) = false do
+		6.1: While current ≠ NULL do // keep pushing the left nodes into the stack
+			6.1.1: push(top, current)
+			6.1.2: current ← current→left
+		6.2: EndWhile
+		6.3: current ← pop(top) // pop a node from the stack
+		6.4: Print current→info // and print it
+		6.5: current ← current→right // move to the right subtree\
+	7: EndWhile
+8: End Procedure
 
 // Root, Left Subtree, Right Subtree
-void preorderIterative (NODE *root)
-{
-	NODE *current;
-	SNODE *top = NULL;
-	if (root == NULL)
-		return;
-	current = root;
-	while (current != NULL)
-	{
-		printf("%d, ", current->info);
+				Procedure preorderIterative (root)
+
+Steps:-
+
+1: Begin Procedure
+	2: top ← NULL // initialise stack as empty
+	3: If root = NULL then // tree is empty
+		3.1: Return
+	4: EndIf
+	5: current ← root
+	6: While current ≠ NULL do
+		6.1: Print current→info
 		// by pushing the right child before left child, we essentially get the left first when popping
-		if (current->right != NULL)
-			push(&top, current->right);
-		if (current->left != NULL)
-			current = current->left;
-		else
-			current = pop(&top);
-	}
-}
+		6.2: If current→right ≠ NULL then
+			6.2.1: push(top, current→right)
+		6.3: EndIf
+		6.4: If current→left ≠ NULL then
+			6.4.1: current ← current→left // move to left subtree
+		6.5: Else
+			6.5.1: current ← pop(top)
+		6.6: EndIf
+	7: EndWhile
+8: End Procedure
+
 // Left Subtree, Right Subtree, Root
-void postorderIterative(NODE *root)
-{
-    NODE *current, *prev;
-    SNODE *top = NULL;
-    if (root == NULL) // tree is empty
-        return;
-    current = root;
-    prev = NULL; // used to track previously visited node
-    do // run atleast once, until stack is empty
-    {
+				Procedure postorderIterative (root)
+
+Steps:-
+
+1: Begin Procedure
+    2: top ← NULL // initialise empty stack
+    3: If root = NULL then // tree is empty
+        3.1: Return
+    4: EndIf
+    5: current ← root
+    6: prev ← NULL // used to track previously visited node
+    7: While (true) do // run atleast once, until stack is empty
         // Traverse the left subtree and push nodes onto the stack
-        while (current != NULL)
-        {
-            push(&top, current);
-            current = current->left;
-        }
-
-        while (current == NULL && !isStackEmpty(top))
-        {
-            current = peek(top);
-
+        7.1: While current ≠ NULL do
+            7.1.1: push(top, current)
+            7.1.2: current ← current→left;
+        7.2: EndWhile
+        7.3: While current = NULL AND not isStackEmpty(top) do
+            7.3.1: current ← peek(top)
             // If the right subtree is not yet processed or visited
-            if (current->right != NULL && current->right != prev)
-            {
-                current = current->right;
-            }
-            else
-            {
-                printf("%d, ", current->info);
-                pop(&top);
-                prev = current;
-                current = NULL;
-            }
-        }
-    } while (!isStackEmpty(top));
-}
+            7.3.2: If current→right ≠ NULL AND current→right ≠ prev do
+                7.3.2.1: current ← current→right
+            7.3.3: Else
+                7.3.3.1: Print current→info
+                7.3.3.2: pop(top)
+                7.3.3.3: prev ← current
+                7.3.3.4: current ← NULL
+            7.3.4: EndIf
+        7.4: EndWhile
+        7.5: If isStackEmpty(top) then
+        	7.5.1: Exit Loop
+        7.6: EndIf
+    8: EndWhile
+9: End Procedure
 
-int getHeight (NODE *root)
-{
-	int leftHeight, rightHeight;
-	if (root == NULL)
-		return 0;
-	leftHeight = getHeight(root->left);
-	rightHeight = getHeight(root->right);
-	return ((leftHeight > rightHeight) ? leftHeight + 1 : rightHeight + 1);
-}
+				Procedure getHeight (root)
 
-void levelOrderTraversal (NODE *root)
-{
-	int i, height;
-	if (root == NULL)
-		return;
-	height = getHeight(root);
-	printf("Level order traversed elements are below:\n");
-	for (i = 0; i < height; i++)
-	{
-		printCurrentLevel(root, i);
-	}
-}
+Steps:-
 
-void printCurrentLevel (NODE *root, int level)
-{
-	if (root == NULL || level >= getHeight(root))
-		return;
-	if (level == 0)
-		printf("%d, ", root->info);
-	else if (level > 0)
-	{
-		printCurrentLevel(root->left, level - 1);
-		printCurrentLevel(root->right, level - 1);
-	}
-}
+1: Begin Procedure
+	2: If root = NULL then
+		2.1: Return 0
+	3: EndIf
+	4: leftHeight ← getHeight(root→left) // get height of the left subtree
+	5: rightHeight ← getHeight(root→right) // get height of the right subtree
+	// choose the greater value and increment it by one, to get the actual height of this tree
+	6: If leftHeight > rightHeight then
+		6.1: Return (leftHeight + 1)
+	7: Else
+		7.1: Return (rightHeight + 1)
+	8: EndIf
+9: End Procedure
 
-int countLeafNodes (NODE *root)
-{
-	if (root == NULL)
-		return 0;
-	else if (root->left == NULL && root->right == NULL)
-		return 1;
-	else
-		return (countLeafNodes(root->left) + countLeafNodes(root->right));
-}
+				Procedure levelOrderTraversal (root)
 
-int countNonLeafNodes (NODE *root)
-{
-	if (root == NULL || (root->left == NULL && root->right == NULL))
-		return 0;
-	else
-		return (1 + countNonLeafNodes(root->left) + countNonLeafNodes(root->right));
-}
+// level order traverses a binary tree
 
-void mirrorTree (NODE *root)
-{
-	NODE *temp;
-	if (root == NULL)
-		return;
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL then // tree is empty
+		2.1: Return
+	3: EndIf
+	4: height ← getHeight(root)
+	5: Print "Level order traversed elements are below:"
+	6: For level = 0 to height - 1 do // print 
+		6.1: printCurrentLevel(root, level)
+		6.2: level ← level + 1
+	7: EndFor
+8: End Procedure
+
+				Procedure printCurrentLevel (root, level)
+
+// Prints the nodes in the current level
+
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL OR level ≥ getHeight(root) then
+		2.1: Return
+	3: Else If level = 0 then
+		3.1: Print root→info
+	4: Else If level > 0 then
+		4.1: printCurrentLevel(root→left, level - 1)
+		4.2: printCurrentLevel(root→right, level - 1)
+	5: EndIf
+6: End Procedure
+
+				Procedure countLeafNodes (root)
+
+// returns the no of leaf nodes in a tree
+
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL then
+		2.1: Return 0
+	3: Else If root→left = NULL AND root→right = NULL // root has no child
+		3.1: Return 1
+	4: Else
+		4.1: Return (countLeafNodes(root→left) + countLeafNodes(root→right))
+	5: EndIf
+6: End Procedure
+
+				Procedure countNonLeafNodes (root)
+
+// Count the no of non leaf nodes and returns it
+
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL OR (root→left = NULL AND root→right = NULL) then
+		2.1: Return 0
+	3: Else
+		3.1: Return (1 + countNonLeafNodes(root→left) + countNonLeafNodes(root→right))
+	4: EndIf
+5: End Procedure
+
+					Procedure mirrorTree (root)
+
+// mirrors a tree by swapping all left and right childs
+
+Steps:-
+
+1: Begin Procedure
+	2: If root = NULL then // tree is empty
+		2.1: Return
+	3: EndIf
 	// mirror the subtrees as well
-	mirrorTree(root->left);
-	mirrorTree(root->right);
+	4: mirrorTree(root→left)
+	5: mirrorTree(root→right)
 	// swap the left child with the right child
-	temp = root->left;
-	root->left = root->right;
-	root->right = temp;
-}
+	6: temp ← root→left
+	7: root→left ← root→right
+	8: root→right ← temp
+9: End Procedure
 
+
+				Procedure isBST(root)
 
 // isBST wrapper function
-int isBST(NODE* root)
-{
+
+Steps:-
+
+1: Begin Procedure
     // Use the helper function with a large range to start with
-    return isBSTUtil(root, INT_MIN, INT_MAX);
-}
+    // INT_MAX and INT_MIN are the largest value and smallest an integer can be, respectively
+    2: Return isBSTUtil(root, INT_MIN, INT_MAX)
+3: End Procedure
+
+				Procedure isBSTUtil (root, minVal, maxVal)
 
 // isBST helper function, assumes the tree has no duplicate nodes
-int isBSTUtil (NODE *root, int minVal, int maxVal)
-{
+
+Steps:-
+
+1: Begin Procedure
     // Base case: an empty tree is considered a valid binary search tree
-    if (root == NULL)
-        return true;
-
+    2: If root = NULL then
+        2.1: Return true
+	3: EndIf
     // check if the current node's data is within the specified range
-    if (root->info < minVal || root->info > maxVal)
-        return false;
-
+    4: If root→info < minVal OR root→info > maxVal then
+        4.1: Return false
+	5: EndIf
     // recursively checks the left and right subtrees, updating the range accordingly
-    return (isBSTUtil(root->left, minVal, root->info - 1) && isBSTUtil(root->right, root->info + 1, maxVal));
-}
-
-void clearBuffer (void) // clears input buffer
-{
-	char ch;
-	while ((ch = getchar()) != '\n' && (int)ch != EOF); // discards leftover characters in the input stream
-}
+    6: Return (isBSTUtil(root→left, minVal, root→info - 1) && isBSTUtil(root→right, root→info + 1, maxVal))
+7: End Procedure
