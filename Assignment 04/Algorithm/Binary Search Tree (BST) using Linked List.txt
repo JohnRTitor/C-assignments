@@ -1,34 +1,8 @@
-// WIP
-
-#define IS_INVALID_OPTION(x) (x == 1 || x == 2 || x == 8 || x == 9 || x == 10)
-#define IS_EMPTY(root) \
-	({\
-		if (root == NULL)\
-		{\
-			fprintf(stderr, "Error: Tree is empty.");\
-			break;\
-		}\
-	})
-
-typedef struct node
-{
-	int info;
-	struct node *left;
-	struct node *right;
-} NODE;
-
-typedef struct stackNode
-{
-	NODE *treeNode;
-	struct stackNode *link;
-} SNODE;
-
-
 				Algorithm Menu - Binary Search Tree using Linked List
 				
 Input:- As per user's option
 Output:- As per user's option
-Data Structure:- Double Linked List where each node contains the data (info), link to the left and right child
+Data Structure:- For Tree nodes, Double Linked List where each node contains the data (info), link to the left and right child. Stack of Tree nodes using Linked List
 
 Steps:-
 
@@ -51,11 +25,11 @@ Steps:-
     4.11: Print "° - Maybe unavailable after mirroring."
     4.12: Print "Enter an option: "
     4.13: Read option
-    4.14: If not BST AND option in [1, 2, 8, 9, 10] // due to issues after mirroring, inaccessible options are to forwarded to an error message
+    4.14: If not BST AND option = (1 OR 2 OR 8 OR 9 OR 10) // due to issues after mirroring, inaccessible options are to forwarded to an error message
     	4.14.1: Print "The tree is no longer a binary search tree (BST). If you have mirrored the tree, please mirror it again to fix it. Only a few options are available."
     	4.14.2: Continue
     4.15: EndIf
-    4.16: Case option=0
+    4.16: Case option = 0
         4.16.1: Print "Press 1 for recursive mode, or any key for iterative mode: "
         4.16.2: Read modeOption
         4.16.3: If modeOption = 1 then
@@ -138,9 +112,9 @@ Steps:-
 		3.1: Print "Error: Memory allocation failed."
 		3.2: Return NULL
 	4: EndIf
-	5: newNode→info = data
-	6: newNode→left = NULL
-	7: newNode→right = NULL
+	5: newNode→info ← data
+	6: newNode→left ← NULL
+	7: newNode→right ← NULL
 	8: Return newNode
 9: End Procedure
 
@@ -281,7 +255,7 @@ Steps:-
 			5.1.1: temp ← root→right
 			5.1.2: ReturnNode(root) // delete root
 			5.1.3: Return temp // return the right subtree, so that it becomes the root 
-		5.2: Else If root→right = NULL // there is no right child
+		5.2: Else If root→right = NULL then // there is no right child
 			5.2.1: temp ← root→left
 			5.2.2: ReturnNode(root) // delete root
 			5.2.3: return temp // return the left subtree, so that it becomes the root
@@ -520,8 +494,9 @@ Steps:-
 	4: EndIf
 5: End Procedure
 
-// Left Subtree, Root, Right Subtree
 				Procedure inorderIterative (root)
+
+// Left Subtree, Root, Right Subtree
 
 Steps:-
 
@@ -538,12 +513,13 @@ Steps:-
 		6.2: EndWhile
 		6.3: current ← pop(top) // pop a node from the stack
 		6.4: Print current→info // and print it
-		6.5: current ← current→right // move to the right subtree\
+		6.5: current ← current→right // move to the right subtree
 	7: EndWhile
 8: End Procedure
 
-// Root, Left Subtree, Right Subtree
 				Procedure preorderIterative (root)
+
+// Root, Left Subtree, Right Subtree
 
 Steps:-
 
@@ -567,8 +543,9 @@ Steps:-
 	7: EndWhile
 8: End Procedure
 
-// Left Subtree, Right Subtree, Root
 				Procedure postorderIterative (root)
+
+// Left Subtree, Right Subtree, Root
 
 Steps:-
 
@@ -604,6 +581,8 @@ Steps:-
 9: End Procedure
 
 				Procedure getHeight (root)
+
+// returns the height of the tree
 
 Steps:-
 
@@ -665,7 +644,7 @@ Steps:-
 1: Begin Procedure
 	2: If root = NULL then
 		2.1: Return 0
-	3: Else If root→left = NULL AND root→right = NULL // root has no child
+	3: Else If root→left = NULL AND root→right = NULL then // root has no child
 		3.1: Return 1
 	4: Else
 		4.1: Return (countLeafNodes(root→left) + countLeafNodes(root→right))
