@@ -1,0 +1,90 @@
+				Algorithm Postfix Evaluation using Stack
+
+Input:- A postfix expression
+Output:- Result of evaluation
+Data Structure:- String (postfix), Character Stack
+
+Steps:-
+
+1: Start
+	2: Print "Enter a postfix expression to evaluate: "
+	3: Read postfix // type: string
+	4: result ←evaluatePostfix(postfix) // type: float
+	5: Print "The postfix expression: ", postfix
+	6: Print "Evaluated to ", result
+7: Stop
+
+				Procedure push (stack, top, data)
+
+// pushes an element onto top of a stack and here top is the pointer of the first element
+
+Steps:-
+
+1: Begin Procedure 
+	2: top ← top + 1 // i is the loop counter
+	3: stack[top] ← data
+4: End Procedure
+
+				Procedure pop (stack, top)
+
+// removes the top element and returns it
+
+Steps:-
+
+1: Begin Procedure
+	2: If top ≤ -1 then // if stack is empty, return -1
+		2.1: Print "Error: Stack is empty."
+		2.2: Return -1
+	3: EndIf
+	4: data ← stack[top]
+	5: top ← top - 1 
+	6: Return data
+7: End Procedure
+
+				Procedure evaluatePostfix (postfix)
+// evaluates a postfix notation and returns the calculated result
+
+Steps:-
+
+1: Begin Procedure
+	2: top ← -1
+	3: For i=0 to i < len(postfix) do
+		3.1: ch ← postfix[i] // read a character from postfix expression
+		3.2: If isspace(ch) then // skip spaces
+			3.2.1: Continue
+		3.3: Else If ch in ['+', '-', '*', '/', '^'] then
+			3.3.1: push(stack, top, ch - '0') // convert char digit to int and push to stack
+		3.4: Else
+			// since y is stored on top of x
+			3.4.1: y ← pop(stack, top)
+			3.4.2: x ← pop(stack, top)
+			// calculates result based on the incoming operator
+			3.4.3: Case ch =  '+'
+				3.4.3.1: result ← x + y
+			3.4.4: EndCase
+			3.4.5: Case ch = '-'
+				3.4.5.1: result ← x - y
+			3.4.6: EndCase
+			3.4.7: Case ch = '*'
+				3.4.7.1: result ← x * y
+			3.4.8: EndCase
+			3.4.9: Case ch =  '/'
+				3.4.9.1: If y = 0 then
+					3.4.9.1.1: Print "Division by zero is not possible."
+					3.4.9.1.2: Return/End Procedure
+				3.4.9.2: EndIf
+				3.4.9.3: result ← x / y
+			3.4.10: EndCase
+			3.4.11: Case ch = '^'
+				3.4.11.1: result ← pow(x, y) // pow function finds x to the power of y and returns the result
+			3.4.12: EndCase
+			3.4.13: Case Default
+				3.4.13.1: Print "Invalid operator: , ch
+				3.4.13.2: Return/End Procedure
+			3.4.14: EndCase
+			3.4.15: push(stack, top, result) // push the calculation result to stack
+		3.5: EndIf
+		3.6: i ← i + 1
+	4: EndFor
+	5: Return pop(stack, top) // pop the result at the end return it
+6: End Procedure
