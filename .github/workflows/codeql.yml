@@ -1,0 +1,99 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
+  schedule:
+    - cron: '39 15 * * 3'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'swift' ]
+        # Use only 'java' to analyze code written in Java, Kotlin or both
+        # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file.
+          # Prefix the list here with "+" to use these queries and those in the config file.
+
+          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          queries: security-extended,security-and-quality
+
+
+      # ℹ️ Command-line programs to run using the OS shell.
+      # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+
+      #   If the Autobuild fails above, remove it and uncomment the following three lines.
+      #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
+
+      - name: Install CodeQL CLI
+        run: |
+          # Install CodeQL CLI
+          curl -L https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql.zip -o codeql.zip
+          unzip codeql.zip -d codeql-cli
+          echo "export PATH=\$PATH:$PWD/codeql-cli/codeql" >> $GITHUB_ENV
+
+      - name: Build and Analyze C files
+        run: |
+          # Get the list of C files in the repository
+          c_files=$(find . -name '*.c')
+
+          echo "Files detected: "
+          echo "$c_files"
+
+          # Create a directory to store analysis results
+          mkdir analysis_results
+
+          # Build and analyze each C file individually
+          # temporary set IFS to newline to correctly handle file names with spaces
+          IFS=$'\n'
+
+          for file in $c_files; do
+            # Extract the filename without extension
+            filename=$(basename -- "$file")
+            filename="${filename%.*}"
+
+            # Build the file using the appropriate compiler
+            echo "Building file: $filename"
+            gcc -Wall -Wextra -o "$filename" "$file"
+
+            # Analyze the file and generate SARIF results
+            codeql database create --language=cpp --source-root="$filename" --source-root=.
+
+            codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
+
+            # Clean up the database after analysis
+            codeql database remove "$filename"
+          done
+          # restore IFS
+          unset IFS
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
