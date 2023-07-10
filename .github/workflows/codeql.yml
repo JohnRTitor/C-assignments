@@ -58,6 +58,15 @@ jobs:
           unzip codeql.zip -d codeql-cli
           echo "export PATH=\$PATH:$PWD/codeql-cli/codeql" >> $GITHUB_ENV
 
+
+      - name: Check CodeQL CLI installation
+        run: ls -l codeql-cli
+
+      - name: Check PATH variable
+        run: echo $PATH
+
+
+
       - name: Build and Analyze C files
         run: |
           # Get the list of C files in the repository
