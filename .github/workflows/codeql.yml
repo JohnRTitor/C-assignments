@@ -62,8 +62,10 @@ jobs:
       - name: Check CodeQL CLI installation
         run: ls -l codeql-cli
 
-      - name: Check PATH variable
-        run: echo $PATH
+      - name: Check the files
+        run: |
+          echo $PWD
+          ls -a
 
 
 
@@ -92,7 +94,7 @@ jobs:
             gcc -Wall -Wextra -o "$filename" "$file"
 
             # Analyze the file and generate SARIF results
-            $PATH:$PWD/codeql-cli/codeql database create --language=cpp --source-root="$filename" --source-root=.
+            codeql database create --language=cpp --source-root="$filename" --source-root=.
 
             codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
 
