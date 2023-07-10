@@ -92,7 +92,7 @@ jobs:
             gcc -Wall -Wextra -o "$filename" "$file"
 
             # Analyze the file and generate SARIF results
-            codeql database create --language=cpp --source-root="$filename" --source-root=.
+            $PATH:$PWD/codeql-cli/codeql database create --language=cpp --source-root="$filename" --source-root=.
 
             codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
 
