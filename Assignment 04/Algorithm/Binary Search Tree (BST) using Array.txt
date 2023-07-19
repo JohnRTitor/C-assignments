@@ -1,0 +1,215 @@
+// WIP algorithm
+#include <stdio.h>
+
+#define MAX_SIZE 1024
+#define EMPTY -1
+#define isValidIndex(i) (i >= 0 && i < MAX_SIZE)
+#define getLeftChildIndex(i) (2 * i + 1)
+#define getRightChildIndex(i) (2 * i + 2)
+
+void init (int bst[]);
+void insertNode (int bst[], int data);
+int searchNode (int bst[], int target);
+void deleteNode (int bst[], int target);
+void deleteSingleParent (int bst[], int targetIndex);
+void deleteParentOfTwo(int bst[], int targetIndex);
+int getMin (int bst[], int index);
+void preorderTraversal (int binaryTree[], int index);
+void inorderTraversal (int binaryTree[],  int index);
+void postorderTraversal (int binaryTree[], int index);
+
+				Algorithm Menu - Binary Search Tree using Array
+
+Input:- As per user's option
+Output:- As per user's option
+Data Structure:- One Dimensional Array to store tree elements (bst)
+Discussion:- isValidIndex method checks whether index is within bst array, init method initialises all existing elements to -1 (denoted by EMPTY)
+
+Steps:-
+
+1: Start
+    2: init(bst) // initialise bst array
+    3: While (true) do 
+        3.1: Print "** Binary Search Tree Operations: **"
+        3.2: Print "1. Insert node, 2. Delete node, 3. Inorder Traversal, 4. Preorder Traversal, 5. Postorder Traversal, 6. Exit"
+        3.3: Print "Enter an option: "
+        3.4: Read option
+        // perform different operations based on different cases
+        3.5: Case option = 1
+            3.5.1: Print "Enter an element to insert: "
+            3.5.2: Read data
+            3.5.3: insertNode(bst, data)
+            3.5.4: Print data, " successfully inserted."
+        3.6: EndCase
+        3.7: Case option = 2
+            3.7.1: Print "Enter an element to delete: "
+            3.7.2: Read data
+            3.7.3: deleteNode(bst, data)
+        3.8: EndCase
+        3.9: Case option = 3
+            3.9.1: Print "Inorder traversed elements are below: "
+            3.9.2: inorderTraversal(bst, 0)
+        3.10: EndCase
+        3.11: Case option = 4
+            3.11.1: Print "Preorder traversed elements are below: "
+        	3.11.2: preorderTraversal(bst, 0)
+        3.12: EndCase
+        3.13: Case option = 5
+            3.13.1: Print Postorder traversed elements are below: "
+            3.13.2: postorderTraversal(bst, 0)
+        3.14: EndCase
+        3.15: Case option = 6
+            3.15.1: Print "Program exited."
+            3.15.2: Exit Loop
+        3.16: EndCase
+        3.17: Case Default
+        	3.17.1: Print "Invalid input. Please try again."
+        3.18: EndCase
+    4: EndWhile
+5: Stop
+
+				Procedure insertNode (bst, data)
+
+// inserts a node, no duplicate element allowed
+
+Steps:-
+
+1: Begin Procedure
+	2: index ← 0
+	3: While isValidIndex(index) do // make sure index stays within array bounds
+		3.1: If bst[index] = data then // dont insert if it already exists
+			3.1.1: Return
+		3.2: Else If bst[index] = EMPTY // only insert if the node is empty
+			3.2.1: bst[index] ← data
+			3.2.2: Return
+		3.3: Else If data < bst[index] // if inserting data is less than current node's data, it should be placed in the right side
+			3.3.1: index ← getLeftChildIndex(index)
+		3.4: Else // if inserting data is greater than current node's value, it should be placed on the right side
+			3.4.1: index ← getRightChildIndex(index)
+		3.5: EndIf
+	4: EndWhile
+	// we reach here if index is out of bound, or array does not have enough space
+	5: Print "Error: Not enough space."
+6: End Procedure
+
+				Procedure searchNode (bst, target)
+
+// looks for the target element and returns the corresponding index
+// else returns EOF to indicate target not found
+
+Steps:-
+
+1: Begin Procedure
+	2: index ← 0
+	3: While isValidIndex(index) do
+		3.1: If bst[index] == EMPTY then // tree is empty
+			3.1.1: Return EOF
+		3.2: Else If bst[index] == target then // found it
+			3.2.1: Return index
+		3.3: Else If target < bst[index] then // it must be in the left subtree
+			3.3.1: index ← getLeftChildIndex(index)
+		3.4: Else // it must be in the right subtree
+			3.4.1: index ← getRightChildIndex(index)
+		3.5: EndIf
+	4: EndWhile
+	5: Return EOF // we reach here if the element has not been found by search
+6: End Procedure
+
+				Procedure deleteNode (bst, target)
+
+Steps:-
+
+1: Begin Procedure
+	2: loc ← searchNode(bst, target)
+	3: If loc = EOF then
+		3.1: Print "Node not found. Could not be deleted."
+		3.2: Return
+	4: EndIf
+	5: left ← getLeftChildIndex(loc)
+	6: right ← getRightChildIndex(loc)
+	7: If bst[left] ≠ EMPTY AND bst[right] ≠ EMPTY then
+		7.1: deleteParentOfTwo(bst, loc)
+	8: Else
+		8.1: deleteSingleParent(bst, loc)
+	9: EndIf
+	10: Print target, " successfully deleted."
+11: End Procedure
+
+
+void deleteSingleParent (int bst[], int targetIndex)
+{
+	int left, right;
+	if (!isValidIndex(targetIndex))
+		return;
+	left = getLeftChildIndex(targetIndex);
+	right = getRightChildIndex(targetIndex);
+	if (!isValidIndex(left) || !isValidIndex(right) || (bst[left] == EMPTY && bst[right] == EMPTY)) // for no child case
+	{
+		bst[targetIndex] = EMPTY;
+		return;
+	}
+	if (bst[left] != EMPTY && bst[right] == EMPTY) // for only left child
+	{
+		bst[targetIndex] = bst[left];
+		bst[left] = EMPTY;
+		return;
+	}
+	if (bst[left] == EMPTY && bst[right] != EMPTY) // for only right child
+	{
+		bst[targetIndex] = bst[right];
+		bst[right] = EMPTY;
+		return;
+	}
+}
+
+void deleteParentOfTwo(int bst[], int targetIndex)
+{
+	int successor, successorIndex;
+	if (!isValidIndex(targetIndex))
+		return;
+	successorIndex = getMin(bst, getRightChildIndex(targetIndex)); // find the inorder successor
+	successor = bst[successorIndex];
+	deleteSingleParent(bst, successorIndex);
+	bst[targetIndex] = successor;
+}
+
+
+int getMin (int bst[], int index)
+{
+    while (isValidIndex(getLeftChildIndex(index)) && bst[getLeftChildIndex(index)] != EMPTY)
+    {
+        index = getLeftChildIndex(index);
+    }
+    return index;
+}
+
+
+void preorderTraversal (int binaryTree[], int index)
+{
+    if (isValidIndex(index) && binaryTree[index] != EMPTY)
+    {
+        printf("%d, ", binaryTree[index]);
+        preorderTraversal(binaryTree, 2 * index + 1); // for left child
+        preorderTraversal(binaryTree, 2 * index + 2); // for right child
+    }
+}
+
+void inorderTraversal (int binaryTree[],  int index)
+{
+    if (isValidIndex(index) && binaryTree[index] != EMPTY)
+    {
+        inorderTraversal(binaryTree, 2 * index + 1); // for left child
+        printf("%d, ", binaryTree[index]);
+        inorderTraversal(binaryTree, 2 * index + 2); // for right child
+    }
+}
+
+void postorderTraversal (int binaryTree[], int index)
+{
+    if (isValidIndex(index) && binaryTree[index] != EMPTY)
+    {
+        postorderTraversal(binaryTree, 2 * index + 1); // for left child
+        postorderTraversal(binaryTree, 2 * index + 2); // for right child
+        printf("%d, ", binaryTree[index]);
+    }
+}
