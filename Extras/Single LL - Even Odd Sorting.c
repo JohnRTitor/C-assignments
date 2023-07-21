@@ -38,6 +38,9 @@ int main ()
     return 0;
 }
 
+/// @brief creates a new node with the given data
+/// @param data 
+/// @return returns the pointer to the newly created node
 NODE* createNode(int data)
 {
     NODE *newNode = (NODE*) malloc(sizeof(NODE));
@@ -51,6 +54,8 @@ NODE* createNode(int data)
     return newNode;
 }
 
+/// @brief reads a linked list from the user
+/// @param head pointer to the head of the list, passed by reference
 void readList (NODE **head)
 {
     int data;
@@ -73,6 +78,8 @@ void readList (NODE **head)
     }   
 }
 
+/// @brief prints the linked list in the format: 1, 2, 3
+/// @param head is the pointer to the head of the list
 void printList (NODE *head)
 {
     NODE *current = head;
@@ -93,6 +100,10 @@ void printList (NODE *head)
     printf("\n");
 }
 
+/// @brief splits the given list into two lists, one containing the even elements and the other containing the odd elements
+/// @param head is the pointer to the head of the original list, remains unchanged
+/// @param evenHead is the pointer to the head of the even list, passed by reference
+/// @param oddHead is the pointer to the head of the odd list, passed by reference
 void getEvenOddLists (NODE *head, NODE **evenHead, NODE **oddHead)
 {
     NODE *newNode = NULL;

@@ -92,6 +92,9 @@ int main ()
     return 0;
 }
 
+/// @brief creates a new node with the given data
+/// @param data 
+/// @return returns the pointer to the newly created node
 NODE* createNode(int data)
 {
     NODE *newNode = (NODE*) malloc(sizeof(NODE));
@@ -105,6 +108,8 @@ NODE* createNode(int data)
     return newNode;
 }
 
+/// @brief reads a linked list from the user
+/// @param head pointer to the head of the list, passed by reference
 void readList(NODE **head)
 {
     int data;
@@ -119,18 +124,15 @@ void readList(NODE **head)
             break;
         newNode = createNode(data);
         if (*head == NULL)
-        {
             *head = newNode;
-            current = newNode;
-        }
         else
-        {
             current->link = newNode;
-            current = newNode;
-        }
+        current = newNode;
     }   
 }
 
+/// @brief prints the linked list in the format: 1, 2, 3
+/// @param head is the pointer to the head of the list
 void printList (NODE *head)
 {
     NODE *current = head;
@@ -151,6 +153,10 @@ void printList (NODE *head)
     printf("\n");
 }
 
+/// @brief searches for the given element in the list
+/// @param head 
+/// @param searchFor is the element to be searched for
+/// @return returns the pointer to the node containing the element, else returns NULL
 NODE* searchList (NODE *head, int searchFor)
 {
     NODE *current = head;
@@ -165,33 +171,31 @@ NODE* searchList (NODE *head, int searchFor)
     return current;
 }
 
+/// @brief Get the union of the two lists
+/// @param head1 is the pointer to the head of the first list
+/// @param head2 is the pointer to the head of the second list
+/// @return the pointer to the head of the union list
 NODE* listUnion (NODE *head1, NODE *head2)
 {
     NODE *newNode = NULL;
     NODE *current1 = head1, *current2 = head2;
     NODE *unionHead = NULL, *unionCurrent = NULL;
 
-    /*
-    * First copy the entire content of list1 (head1) to union list
-    * Then copy each element of the list2 (head2) provided
-    * it does not already exist in the union list
-    */
+    // First copy the entire content of list1 (head1) to union list
     while (current1 != NULL)
     {
         newNode = createNode(current1->info);
         if (unionHead == NULL)
-        {
             unionHead = newNode;
-            unionCurrent = newNode;
-        }
         else
-        {
             unionCurrent->link = newNode;
-            unionCurrent = unionCurrent->link;
-        }
-        current1 = current1->link;
+        unionCurrent = newNode;
+        current1 = current1->link; // traverse list1
     }
-
+    /*
+    * Then copy each element of the list2 (head2) provided
+    * it does not already exist in the union list
+    */
     while (current2 != NULL)
     {
         if (searchList(unionHead, current2->info) == NULL)
@@ -200,11 +204,15 @@ NODE* listUnion (NODE *head1, NODE *head2)
             unionCurrent->link = newNode;
             unionCurrent = unionCurrent->link;
         }
-        current2 = current2->link;
+        current2 = current2->link; // traverse list2
     }
     return unionHead;
 }
 
+/// @brief Get the intersection of the two lists
+/// @param head1 is the pointer to the head of the first list
+/// @param head2 is the pointer to the head of the second list
+/// @return the pointer to the head of the intersection list
 NODE* listIntersection (NODE *head1, NODE *head2)
 {
     NODE *newNode = NULL;
@@ -219,21 +227,18 @@ NODE* listIntersection (NODE *head1, NODE *head2)
         {
             newNode = createNode(current1->info);
             if (intersectionHead == NULL)
-            {
                 intersectionHead = newNode;
-                intersectionCurrent = newNode;
-            }
             else
-            {
                 intersectionCurrent->link = newNode;
-                intersectionCurrent = intersectionCurrent->link;
-            }
+            intersectionCurrent = newNode;
         }
-        current1 = current1->link;
+        current1 = current1->link; // traverse list1
     }
     return intersectionHead;
 }
 
+/// @brief deletes the entire list and sets the head to NULL
+/// @param head 
 void freeList (NODE **head)
 {
     NODE *current = *head;
