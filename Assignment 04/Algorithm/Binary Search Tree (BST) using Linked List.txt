@@ -11,7 +11,7 @@ Steps:-
 3: root ← NULL // initialise tree as empty
 4: While (true) do
 	4.1: BST ← isBST(root)
-    4.2: Print "Binary Tree operations: "
+    4.2: Print "Binary Search Tree operations: "
     4.3: Print "0. Change Mode - current: ", mode
     4.4: If BST then
         4.4.1. Print "1. Insert a node^°, 2. Delete a node^°"
@@ -25,7 +25,7 @@ Steps:-
     4.11: Print "° - Maybe unavailable after mirroring."
     4.12: Print "Enter an option: "
     4.13: Read option
-    4.14: If not BST AND option = (1 OR 2 OR 8 OR 9 OR 10) // due to issues after mirroring, inaccessible options are to forwarded to an error message
+    4.14: If not BST AND option = (1 OR 2 OR 8 OR 9 OR 10) then // due to issues after mirroring, inaccessible options are to forwarded to an error message
     	4.14.1: Print "The tree is no longer a binary search tree (BST). If you have mirrored the tree, please mirror it again to fix it. Only a few options are available."
     	4.14.2: Continue
     4.15: EndIf
