@@ -152,6 +152,6 @@ void getSortedPositions (int arr[], int positions[], int size)
     for (i = 0; i < size; i++)
     {
         j = searchElement(sortedArr, size, arr[i]);
-        positions[i] = j+1; // +1 because the index starts from 0
+        positions[i] = j + 1; // +1 because the index starts from 0
     }
 }
