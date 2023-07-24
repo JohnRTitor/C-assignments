@@ -8,7 +8,7 @@ Discussion:- isValidIndex method checks whether index is within bst array, init 
 Steps:-
 
 1: Start
-    2: init(bst) // initialise bst array
+    2: init(bst) // initialise bst array 
     3: While (true) do 
         3.1: Print "** Binary Search Tree Operations: **"
         3.2: Print "1. Insert node, 2. Delete node, 3. Inorder Traversal, 4. Preorder Traversal, 5. Postorder Traversal, 6. Exit"
@@ -221,6 +221,6 @@ Steps:-
 Steps:-
 
 1: Begin Procedure
-	2: Return (i >= 0 AND i < MAX_SIZE)
+	2: Return (i >= 0 AND i < MAX_SIZE) // MAX_SIZE is defined by the program
 3: End Procedure
 
