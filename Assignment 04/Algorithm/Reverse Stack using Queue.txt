@@ -1,0 +1,156 @@
+				Algorithm Reverse Stack using Queue
+
+Input:- As per users' option, elements to enqueue and dequeue
+Output:- Depends on users' option, reversed queue/modified queue
+Data Structure:- A structure QUEUE with one dimensional array to store queue elements, two integers to store front and rear index of the queue
+				 A structure STACK with one dimensional array to store stack elements and an integer for storing top index
+
+Steps:-
+
+1: Start
+	2: s→top = -1; // initialise stack
+	3: While (true) do
+        3.1: Print "Stack Operations:"
+    	3.2: Print "1. Push, 2. Pop, 3. Reverse, 4. Display, 5. Exit"
+        3.3: Print "Enter an option: "
+        3.4: Read option
+        
+        3.5: Case option = 1
+            3.5.1: Print "Enter the element to push: "
+            3.5.2: Read data
+            3.5.3: push(s, data)
+        3.6: EndCase
+        3.7: Case option = 2
+            3.7.1: data = pop(s)
+            3.7.2: If data != EOF then // here we check for the return value of pop
+                3.7.2.1: Print "Popped element: ", data
+        3.8: EndCase
+        3.9: Case option = 3
+        	3.9.1: reverseStack(s)
+        3.10: EndCase
+        3.11: Case option = 4
+        	3.11.1: Print "Stack is below:"
+            3.11.2: printStack(s)
+        3.12: EndCase
+        3.13: Case option = 5
+            3.13.1: Print "Program exited."
+			3.13.2: Exit Loop
+        3.14: EndCase
+        3.15: Case Default
+        	3.15.1: Print "Invalid choice. Please try again."
+        3.16: EndCase
+    4: EndWhile
+5: Stop
+
+				Procedure printStack (s) // s is a STACK structure
+
+Steps:-
+
+1: Begin Procedure
+	2: If isEmpty(s→top) then
+		2.1: Print "Error: Stack is empty."
+		2.2: Return
+	3: EndIf
+	4: For i = s→top to 0 do // print elements from top to bottom
+		4.1: Print s→element[i]
+		4.2: i ← i - 1
+	5: EndFor
+6: End Procedure
+
+				Procedure push (s, data)
+
+Steps:-
+
+1: Begin Procedure
+	2: If isFull(s→top) then
+		2.1: Print "Error: Stack is full."
+		2.2: Return
+	3: EndIf
+	4: s→top = s→top + 1
+	5: s→element[s→top] = data // increment stack→top by one and push the element
+6: End Procedure
+
+				Procedure pop (s)
+
+Steps:-
+
+1: Begin Procedure
+	2: If isEmpty(s→top) then
+		2.1: Return EOF
+	3: Else
+		3.1: data ← s→element[s→top]
+		3.2: s→top = s→top - 1 
+		3.3: Return data // return the top most element of the stack and remove it, by decrementing stack->top
+	4: EndIf
+5: End Procedure
+
+				Procedure reverseStack (STACK s)
+
+Steps:-
+
+1: Begin Procedure
+	// initialise queue
+	2: q→front = -1
+	3: q→rear = -1
+	4: If isEmpty(s→top) then
+		4.1: Print "Error: Stack is empty."
+		4.2: Return
+	5: EndIf
+	6: While NOT isEmpty(s→top) do // until stack is empty
+		6.1: enqueue(q, pop(s)) // pop one element from the stack and add to queue
+	7: EndWhile
+	8: While NOT isEmpty(q→front) do // until queue is empty
+		8.1: push(s, dequeue(q)) // dequeue one element from the queue and push it to the stack
+	9: EndWhile
+	10: Print "Stack successfully reversed."
+11: End Procedure
+
+				Procedure enqueue (q, data)
+
+Steps:-
+
+1: Begin Procedure
+	2: If isFull(q→rear) then
+		2.1: "Error: Queue is full."
+		2.2: Return
+	3: EndIf
+	4: If isEmpty(q→front) then // if queue is initially empty, increment queue->front as well
+		4.1: q→front = 0
+	5: EndIf
+	6: q→rear = q→rear + 1
+	7: q→element[q→rear] = data // increment queue->rear and add the element to at the end
+8: End Procedure
+
+				Procedure dequeue (q)
+
+Steps:-
+
+1: Begin Procedure
+	2: If isEmpty(q→front) then // queue is empty
+		2.1: Return EOF
+	3: EndIf
+	4: dequeued = q→element[q→front] // get the element to be dequeued
+	5: If q→front = q→rear then // only one element left
+		// update front and rear indicators to indicate the queue is fully empty
+		5.1: q→front = -1
+		5.2: q→rear = -1
+	6: Else // there are multiple elements
+		6.1: q→front = q→front + 1 // just increment the front indicator to mark dequeued
+	7: EndIf
+	8: Return dequeued
+9: End Procedure
+
+				Procedure isEmpty(x)
+Steps:-
+
+1: Begin Procedure
+	2: Return (x = -1) // return the compare result (either true or false)
+3: End Procedure
+
+				Procedure isFull(x)
+
+Steps:-
+
+1: Begin Procedure
+	2: Return (x >= MAX_SIZE) // return the compare result (true or false), MAX_SIZE is defined by the user
+3: End Procedure
