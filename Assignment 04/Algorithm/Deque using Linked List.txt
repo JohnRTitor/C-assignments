@@ -1,0 +1,187 @@
+				Algorithm - Double Ended Queue (Deque)
+
+Input:- As per user's choice, queue can be input restricted or output restricted. And user can then perform actions based on input
+Output:- The output is displayed on the screen as per user's choice
+Data Structure:- Single Linked List (NODE) that contains info and link to next node
+				 The DEQUE structure contains two members, front and rear, which are pointers to the first and last nodes of the double ended queue respectively
+Discussion:- q is a DEQUE type structer, restriction is a string indicating the restriction mode.
+
+Steps:-
+
+1: Start
+	2: restriction ← "input" // input restricted by default
+	// queue initialisation
+	3: q→front = NULL, q→rear = NULL
+	
+	4: While (true) do
+        4.1: Print "Deque (Double-Ended Queue) operations: "
+        4.2: Print "0. Change restriction - current:", mode
+        4.3: Print "1. Enqueue, 2. Dequeue, 3. Display Deque, 4. Erase Deque, 5. Exit\n");
+        4.4: Print "Enter an option: "
+        4.5: Read option
+
+        4.6: Case option = 0
+        	4.6.1: Print "Press 1 for input restriction, or any key for output restricted mode: "
+    		4.6.2: Read data
+    		4.6.3: If data = 1 then
+				4.6.3.1: restriction ← "input"
+			4.6.4: Else
+				4.6.5: restriction ← "output"
+    		4.6.5: EndIf
+    	4.7: EndCase
+        4.8: Case option = 1
+            4.8.1: Print "Enter data to insert: "
+            4.8.2: Read data
+            4.8.3: enqueue(q, data, restriction)
+            4.8.4: Print data, "successfully inserted."
+        4.9: EndCase
+		4.10: Case option = 2
+            4.10.1: data ← dequeue(q, restriction)
+            4.10.2: If data ≠ EOF then
+                4.10.2.1: Print "Removed element: ", data
+			4.10.3: EndIf
+		4.11: EndCase
+        4.12: Case option = 3
+            4.12.1: printDeque(q)
+        4.13: EndCase
+        4.14: Case option = 4
+        	4.14.1: eraseDeque(q)
+        	4.14.2: Print "Completely deleted the whole Deque. Please start over!"
+        4.15: EndCase
+        4.16: Case option = 5
+            4.16.1: Print "Program exited."
+			4.16.2: Exit Loop
+        4.17: EndCase
+        4.18: Case Default
+            4.18.1: Print "Invalid input. Please try again."
+        4.19: EndCase
+    4.20: EndWhile
+    5: eraseDeque(q)
+6: Stop
+
+				Procedure createNode (data)
+// the function gets data externally to insert in each node
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← getNode(NODE)
+	3: If newNode = NULL then
+		3.1: Print "Error: Memory allocation failed."
+		3.2: Return NULL
+	4: EndIf
+	5: newNode→info ← data
+	6: newNode→left ← NULL
+	7: newNode→right ← NULL
+	8: Return newNode
+9: End Procedure
+
+
+				Procedure printDeque (q)
+
+// q is a QUEUE type structure which contains two members q->front and q->rear
+
+Steps:-
+
+1: Begin Procedure
+	2: If q->front = NULL OR q->rear = NULL then
+		2.1: Print "Error: Queue is empty."
+		2.2: Return
+	3: EndIf
+	4: current ← q→front
+	5: While current ≠ NULL do
+		5.1: Print current→info
+		5.2: current ← current→link
+	6: EndWhile
+7: End Procedure
+
+				Procedure eraseDeque (q)
+
+Steps:-
+
+1: Begin Procedure
+	2: current = q→front
+	3: While current ≠ NULL do
+		3.1: temp ← current
+		3.2: current ← current→link
+		3.3: free(temp)
+	4: EndWhile
+	5: q→front = NULL
+	6: q→rear = NULL
+7: End Procedure
+
+				Procedure enqueue (q, data, restriction)
+
+Steps:-
+
+1: Begin Procedure
+	2: newNode ← createNode(data)
+	3: If q→front = NULL OR q→rear = NULL then // Deque is empty
+		3.1: q→front = newNode
+		3.2: q→rear = newNode
+		3.3: Return
+	4: EndIf
+	5: position ← "rear" // rear insertion by default
+	6: If restriction ≠ "input" then
+		6.1: Print "Enter 1 for enqueuing in front, or press any key for rear enqueuing (default): "
+		6.2: Read option
+		6.3: If option = 1 then
+			6.3.1: position ← "front"
+		6.4: Else
+			6.4.1: position ← "rear"
+		6.5: EndIf
+	7: EndIf
+
+	8: If position = "front" then
+		8.1: newNode→link = q→front
+		8.2: q→front = newNode
+	9: Else
+		9.1: q→rear→link = newNode
+		9.2: q→rear = newNode
+	10: EndIf
+11: End Procedure
+
+				Procedure dequeue (q, restriction)
+
+Steps:-
+
+1: Begin Procedure
+	2: If q→front = NULL then
+		2.1: Print "Error: Deque is empty."
+		2.2: Return EOF
+	3: EndIf
+
+	4: data = q→front→info
+	5: If q→front = q→rear then // there is only one element
+		5.1: ReturnNode(q→front)
+		5.2: q→front = NULL
+		5.3: q→rear = NULL
+		5.4: Return data
+	6: EndIf
+	// multiple elements present
+	7: position ← "rear" // rear deletion by default
+	8: If restriction ≠ "output" then
+		8.1: Print "Enter 1 for deletion from rear end, or press any key for front deletion (default): "
+		8.2: Read option
+		8.3: If option = 1 then
+			8.3.1: position ← "rear"
+		8.4: Else
+			8.4.1: position ← "front"
+		8.5: EndIf
+	9: EndIf
+	
+	10: If position = "rear" then // rear deletion
+		10.1: temp ← q→front
+		10.2: While temp→link ≠ q→rear do
+			10.2.1: temp ← temp→link
+		10.3: EndWhile
+		10.4: ReturnNode(q→rear)
+		10.5: q→rear ← temp
+		10.6: q→rear→link ← NULL
+	11: Else // front deletion by default
+		11.1: temp ← q→front
+		11.2: q→front ← q→front→link
+		11.3: ReturnNode(temp)
+	12: EndIf
+	13: Return data
+14: End Procedure

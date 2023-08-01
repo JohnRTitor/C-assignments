@@ -1,23 +1,3 @@
-// WIP algorithm
-#include <stdio.h>
-
-#define MAX_SIZE 1024
-#define EMPTY -1
-#define isValidIndex(i) (i >= 0 && i < MAX_SIZE)
-#define getLeftChildIndex(i) (2 * i + 1)
-#define getRightChildIndex(i) (2 * i + 2)
-
-void init (int bst[]);
-void insertNode (int bst[], int data);
-int searchNode (int bst[], int target);
-void deleteNode (int bst[], int target);
-void deleteSingleParent (int bst[], int targetIndex);
-void deleteParentOfTwo(int bst[], int targetIndex);
-int getMin (int bst[], int index);
-void preorderTraversal (int binaryTree[], int index);
-void inorderTraversal (int binaryTree[],  int index);
-void postorderTraversal (int binaryTree[], int index);
-
 				Algorithm Menu - Binary Search Tree using Array
 
 Input:- As per user's option
@@ -28,7 +8,7 @@ Discussion:- isValidIndex method checks whether index is within bst array, init 
 Steps:-
 
 1: Start
-    2: init(bst) // initialise bst array
+    2: init(bst) // initialise bst array 
     3: While (true) do 
         3.1: Print "** Binary Search Tree Operations: **"
         3.2: Print "1. Insert node, 2. Delete node, 3. Inorder Traversal, 4. Preorder Traversal, 5. Postorder Traversal, 6. Exit"
@@ -136,80 +116,111 @@ Steps:-
 11: End Procedure
 
 
-void deleteSingleParent (int bst[], int targetIndex)
-{
-	int left, right;
-	if (!isValidIndex(targetIndex))
-		return;
-	left = getLeftChildIndex(targetIndex);
-	right = getRightChildIndex(targetIndex);
-	if (!isValidIndex(left) || !isValidIndex(right) || (bst[left] == EMPTY && bst[right] == EMPTY)) // for no child case
-	{
-		bst[targetIndex] = EMPTY;
-		return;
-	}
-	if (bst[left] != EMPTY && bst[right] == EMPTY) // for only left child
-	{
-		bst[targetIndex] = bst[left];
-		bst[left] = EMPTY;
-		return;
-	}
-	if (bst[left] == EMPTY && bst[right] != EMPTY) // for only right child
-	{
-		bst[targetIndex] = bst[right];
-		bst[right] = EMPTY;
-		return;
-	}
-}
+				Procedure deleteSingleParent (bst, targetIndex)
 
-void deleteParentOfTwo(int bst[], int targetIndex)
-{
-	int successor, successorIndex;
-	if (!isValidIndex(targetIndex))
-		return;
-	successorIndex = getMin(bst, getRightChildIndex(targetIndex)); // find the inorder successor
-	successor = bst[successorIndex];
-	deleteSingleParent(bst, successorIndex);
-	bst[targetIndex] = successor;
-}
+Steps:-
 
+1: Begin Procedure
+	2: If NOT isValidIndex(targetIndex) then
+		2.1: Return
+	3: EndIf
+	4: left ← getLeftChildIndex(targetIndex)
+	5: right ← getRightChildIndex(targetIndex)
+	6: If bst[left] = EMPTY AND bst[right] = EMPTY then // for no child case
+		6.1: bst[targetIndex] ← EMPTY
+		6.2: Return
+	7: Else If bst[left] ≠ EMPTY AND bst[right] = EMPTY then // for only left child
+		7.1: bst[targetIndex] ← bst[left]
+		7.2: bst[left] ← EMPTY
+		7.3: Return
+	8: Else If bst[left] = EMPTY AND bst[right] ≠ EMPTY then // for only right child
+		8.1: bst[targetIndex] ← bst[right]
+		8.2: bst[right] ← EMPTY
+		8.3: Return
+	9: EndIf
+10: End Procedure
 
-int getMin (int bst[], int index)
-{
-    while (isValidIndex(getLeftChildIndex(index)) && bst[getLeftChildIndex(index)] != EMPTY)
-    {
-        index = getLeftChildIndex(index);
-    }
-    return index;
-}
+				Procedure deleteParentOfTwo(bst, targetIndex)
+
+Steps:-
+
+1: Begin Procedure
+	2: If NOT isValidIndex(targetIndex) then
+		2.1: Return
+	3: EndIf
+	4: successorIndex ← getMin(bst, getRightChildIndex(targetIndex)) // find the inorder successor
+	5: successor ← bst[successorIndex]
+	6: deleteSingleParent(bst, successorIndex)
+	7: bst[targetIndex] ← successor
+8: End Procedure
 
 
-void preorderTraversal (int binaryTree[], int index)
-{
-    if (isValidIndex(index) && binaryTree[index] != EMPTY)
-    {
-        printf("%d, ", binaryTree[index]);
-        preorderTraversal(binaryTree, 2 * index + 1); // for left child
-        preorderTraversal(binaryTree, 2 * index + 2); // for right child
-    }
-}
+				Procedure getMin (bst, index)
 
-void inorderTraversal (int binaryTree[],  int index)
-{
-    if (isValidIndex(index) && binaryTree[index] != EMPTY)
-    {
-        inorderTraversal(binaryTree, 2 * index + 1); // for left child
-        printf("%d, ", binaryTree[index]);
-        inorderTraversal(binaryTree, 2 * index + 2); // for right child
-    }
-}
+Steps:-
 
-void postorderTraversal (int binaryTree[], int index)
-{
-    if (isValidIndex(index) && binaryTree[index] != EMPTY)
-    {
-        postorderTraversal(binaryTree, 2 * index + 1); // for left child
-        postorderTraversal(binaryTree, 2 * index + 2); // for right child
-        printf("%d, ", binaryTree[index]);
-    }
-}
+1: Begin Procedure
+    2: While bst[getLeftChildIndex(index)] ≠ EMPTY do
+        2.1: index ← getLeftChildIndex(index)
+    3: EndWhile
+    4: Return index
+5: End Procedure
+
+
+				Procedure preorderTraversal (binaryTree, index)
+
+Steps:-
+
+1: Begin Procedure
+    2: If isValidIndex(index) AND binaryTree[index] ≠ EMPTY then
+        2.1: Print binaryTree[index])
+        2.2: preorderTraversal(binaryTree, 2 * index + 1) // for left child
+        2.3: preorderTraversal(binaryTree, 2 * index + 2) // for right child
+    3: EndIf
+4: End Procedure
+
+				Procedure inorderTraversal (binaryTree, index)
+
+Steps:-
+
+1: Begin Procedure
+    2: If isValidIndex(index) AND binaryTree[index] ≠ EMPTY then
+        2.1: inorderTraversal(binaryTree, 2 * index + 1) // for left child
+        2.2: Print binaryTree[index]
+        2.3: inorderTraversal(binaryTree, 2 * index + 2) // for right child
+    3: EndIf
+4: End Procedure
+
+				Procedure postorderTraversal (binaryTree, index)
+
+Steps:-
+
+1: Begin Procedure
+    2: If isValidIndex(index) AND binaryTree[index] ≠ EMPTY then
+        2.1: postorderTraversal(binaryTree, 2 * index + 1) // for left child
+        2.2: postorderTraversal(binaryTree, 2 * index + 2) // for right child
+        2.3: Print binaryTree[index]
+    3: EndIf
+4: End Procedure
+
+				Procedure getLeftChildIndex (i)
+Steps:-
+
+1: Begin Procedure
+	2: Return (2 * i + 1)
+3: End Procedure
+
+				Procedure getRightChildIndex (i)
+Steps:-
+
+1: Begin Procedure
+	2: Return (2 * i + 2)
+3: End Procedure
+
+				Procedure isValidIndex (i)
+Steps:-
+
+1: Begin Procedure
+	2: Return (i >= 0 AND i < MAX_SIZE) // MAX_SIZE is defined by the program
+3: End Procedure
+

@@ -18,6 +18,7 @@ typedef struct node
 NODE* createNode (int data);
 void readSortedList (NODE **head);
 void printList (NODE *head);
+void freeList (NODE **head);
 
 int main ()
 {
@@ -25,9 +26,14 @@ int main ()
     readSortedList(&head);
     printf("List is below: \n");
     printList(head);
+    freeList(&head);
     return 0;
 }
 
+
+/// @brief creates a new node with the given data
+/// @param data 
+/// @return returns the pointer to the newly created node
 NODE* createNode (int data)
 {
     NODE *newNode = (NODE *)malloc(sizeof(NODE));
@@ -42,6 +48,8 @@ NODE* createNode (int data)
     return newNode;
 }
 
+/// @brief reads a sorted linked list from the user
+/// @param head is the pointer to the head of the list, passed by reference
 void readSortedList (NODE **head)
 {
     int data;
@@ -52,15 +60,13 @@ void readSortedList (NODE **head)
     printf("Enter the elements (type -1 to stop):");
     while (true)
     {
-        scanf("%d", &data);
+        scanf_s("%d", &data);
         if (data == -1)
             break;
         
         newNode = createNode(data);
         if (*head == NULL) // for inserting a single element
-        {
             *head = newNode;
-        }
         else
         {
             prev = NULL;
@@ -84,6 +90,8 @@ void readSortedList (NODE **head)
     }
 }
 
+/// @brief prints the linked list in the format: 1, 2, 3
+/// @param head is the pointer to the head of the list
 void printList (NODE *head)
 {
     NODE *current = head;
@@ -101,4 +109,20 @@ void printList (NODE *head)
         current = current->link;
     }
     printf("\n");
+}
+
+/// @brief deletes the entire list and sets the head to NULL
+/// @param head is the pointer to the head of the list, passed by reference
+void freeList (NODE **head)
+{
+    NODE *current = *head;
+    NODE *temp = NULL;
+
+    while (current != NULL)
+    {
+        temp = current;
+        current = current->link;
+        free(temp);
+    }
+    *head = NULL;
 }
