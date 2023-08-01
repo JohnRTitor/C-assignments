@@ -56,7 +56,18 @@ jobs:
           # Install CodeQL CLI
           curl -L https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql.zip -o codeql.zip
           unzip codeql.zip -d codeql-cli
-          echo "export PATH=\$PATH:$PWD/codeql-cli/codeql" >> $GITHUB_ENV
+          echo "export PATH=\$PATH:$PWD/codeql-cli/codeql/codeql" >> $GITHUB_ENV
+
+
+      - name: Check CodeQL CLI installation
+        run: ls -l codeql-cli
+
+      - name: Check the files
+        run: |
+          echo $PWD
+          ls -a
+
+
 
       - name: Build and Analyze C files
         run: |
@@ -83,9 +94,14 @@ jobs:
             gcc -Wall -Wextra -o "$filename" "$file"
 
             # Analyze the file and generate SARIF results
-            codeql database create --language=cpp --source-root="$filename" --source-root=.
 
-            codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
+            database_name="analysis_database"
+            mkdir "$database_name"
+            cp "$file" "$database_name/$filename.c"
+
+            codeql-cli/codeql/codeql database create --language=cpp --source-root="$filename" "$filename"
+
+            codeql-cli/codeql/codeql query run --database="$filename" --format=sarif-latest --output="analysis_results/$filename.sarif"
 
             # Clean up the database after analysis
             codeql database remove "$filename"
