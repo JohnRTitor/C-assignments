@@ -62,7 +62,7 @@ Steps:-
 Steps:-
 
 1: Begin Procedure
-	2: If q->front = NULL OR q.rear = NULL then
+	2: If q→front = NULL OR q→rear = NULL then
 		2.1: Print "Error: Queue is empty."
 		2.2: Return
 	3: EndIf
