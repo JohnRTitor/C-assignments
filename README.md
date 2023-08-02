@@ -24,7 +24,7 @@ To access the assignments and their corresponding code, you can navigate through
 
 ## Contributing and Feedback
 
-As this repository is maintained by me, John Titor for my college coursework, contributions from external users may not be accepted. However, you can provide feedback or suggestions by contacting them through my GitHub profile. You can also create "issues", to inform me of any code improvements.
+As this repository is maintained by me, John Titor for my college coursework, contributions from external users may not be accepted. However, you can provide feedback or suggestions by contacting me through my GitHub profile. You can also create "issues", to inform me of any code improvements.
 
 Please note that the code and algorithm descriptions provided in this repository are intended for educational purposes. They serve as examples for understanding C programming concepts and data structure implementations. You are encouraged to learn from these assignments, but avoid directly copying the code for your own assignments without understanding and modifying it appropriately.
 
