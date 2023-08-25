@@ -1,14 +1,14 @@
 # C-Assignments
 
-This repository contains a collection of C course assignments and data structures implementations using the C programming language. These assignments are regularly uploaded by the GitHub user John Titor. The repository is organized into different assignment folders, each containing C code files and algorithm descriptions in the form of pseudocode in plain text (.txt) files.
+This repository contains a collection of C course assignments and data structures implementations using the C programming language. These assignments are regularly uploaded by me, GitHub user JohnRTitor. The repository is organized into different category folders, each containing C code files and algorithm descriptions in the form of pseudocode in plain text (.txt) files.
 
 ## Assignment Structure
 
-The root directory of the repository contains several assignment folders, named "Assignment 01", "Assignment 02", and so on, representing different programming assignments. Each assignment folder follows a similar structure and includes the following components:
+The root directory of the repository contains several assignment folders, named "Array", "Linked List" and so on, representing assignments for different data structures. Each folder follows a similar structure and includes the following components:
 
 1. **C Code Files**: These are the main files that contain the C code solutions to the respective assignments. The code files have the extension `.c` and are typically named in a descriptive manner to indicate the purpose of the program.
 
-2. **Algorithm Folder**: Each assignment folder also contains an "algorithm" subfolder. This folder includes text files with algorithm descriptions, which are typically written in pseudocode or plain text format. These algorithm files provide insights into the logic and steps involved in solving the respective programming assignments.
+2. **Algorithm Folder**: Each assignment folder also contains an "Algorithms" subfolder. This folder includes text files with algorithm descriptions, which are typically written in pseudocode in plain text format. These algorithm files provide insights into the logic and steps involved in solving the respective programming assignments.
 
 ## Navigating the Repository
 
@@ -16,11 +16,11 @@ To access the assignments and their corresponding code, you can navigate through
 
 1. Start by browsing the root directory and identify the assignment you are interested in.
 
-2. Enter the respective assignment folder by clicking on the folder name (e.g., "Assignment 01").
+2. Enter the respective assignment folder by clicking on the folder name (e.g., "Array", "Linked List").
 
-3. Inside the assignment folder, you will find the C code files (.c) related to that assignment.
+3. Inside the assignment folder, you will find the C code files (.c) related to that assignment type.
 
-4. Additionally, you can explore the "algorithm" subfolder within each assignment folder to access the algorithm descriptions in the form of text files.
+4. Additionally, you can explore the "Algorithms" subfolder within each assignment folder to access the algorithm descriptions in the form of text files.
 
 ## Contributing and Feedback
 
