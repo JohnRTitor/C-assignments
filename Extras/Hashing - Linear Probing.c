@@ -30,22 +30,43 @@ int linearProbing (int arr[], int key)
     }
 }
 
+int quadraticProbing (int arr[], int key)
+{
+    int index = hash(key);
+    int attempts = 0;
+    while (true)
+    {
+        if (arr[index] == EMPTY || arr[index] == key)
+            return index;
+        else
+        {
+            index = (hash(key) + attempts * attempts) % MAX_SIZE;
+            attempts++;
+            if (attempts == MAX_SIZE)
+                return -1;
+        }
+    }
+}
+
 int main ()
 {
     int size, arr[MAX_SIZE];
     int data, index;
 
     init(arr);
-    printf("Enter the size: ");
-    scanf("%d", &size);
 
-    printf("Enter the elements: ");
-    for (int i = 0; i < size; i++)
+    printf("Enter the elements: (-1 to stop) ");
+    while (true)
     {
         scanf("%d", &data);
-        int index = linearProbing(arr, data);
+        if (data == -1) // -1 termination
+            break;
+        index = linearProbing(arr, data);
         if (index == -1)
-            fprintf(stderr, "Hash table is full\n");
+        {
+            fprintf(stderr, "Hash table is full.\n");
+            break;
+        }
         else
             arr[index] = data;
     }
@@ -54,9 +75,9 @@ int main ()
     scanf("%d", &data);
     index = linearProbing(arr, data);
     if (index == -1)
-        printf("Element not found\n");
+        printf("Element not found.\n");
     else
-        printf("Element found at index %d\n", index);
+        printf("Element found at index %d.\n", index);
 }
 
 void init (int arr[])

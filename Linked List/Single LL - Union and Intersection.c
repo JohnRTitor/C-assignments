@@ -307,5 +307,5 @@ void clearInputBuffer ()
 {
     char ch;
     // read until the end of the line or end of file
-    while ((ch = getchar()) != '\n' && ch != EOF);
+    while ((ch = getchar()) != '\n' && (int)ch != EOF);
 }
