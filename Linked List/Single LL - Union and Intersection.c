@@ -1,10 +1,10 @@
 /*
 * Objectives:-
-** get two linked lists (head1, head2) from user
+** get two sets as linked list (head1, head2) from user
 ** create a menu:
-*** print the union of the two lists
-*** print the intersection of the two lists
-*** re enter the lists
+*** print the union of the two sets
+*** print the intersection of the two sets
+*** re enter the sets
 *** exit
 */
 
@@ -18,13 +18,14 @@ typedef struct node
     struct node *link;
 } NODE;
 
-NODE* createNode(int data);
-void readList(NODE **head);
-void printList (NODE *head);
+NODE* createNode (int data);
+void readSet (NODE **head);
+void printList (NODE *head, char listName[]);
 NODE* searchList (NODE *head, int searchFor);
-NODE* listUnion (NODE *head1, NODE *head2);
-NODE* listIntersection (NODE *head1, NODE *head2);
+NODE* setUnion (NODE *head1, NODE *head2);
+NODE* setIntersection (NODE *head1, NODE *head2);
 void freeList (NODE **head);
+void clearInputBuffer (void);
 
 int main ()
 {
@@ -35,46 +36,71 @@ int main ()
     while (true)
     {
         printf("\nMain Menu: \n");
-        printf("1. Enter the elements of the list, if list is not empty, it appends the new elements \n");
-        printf("2. Print the lists \n");
-        printf("3. Print the union of the lists \n");
-        printf("4. Print the intersection of the lists \n");
-        printf("5. Delete the lists \n");
+        printf("1. Enter the elements of the sets. For non-empty sets, it appends the new elements \n");
+        if (head1 != NULL || head2 != NULL) // atleast one set needs to be non-empty to perform the following actions
+        {
+            printf("2. Print the sets \n");
+            printf("3. Print the union of the sets \n");
+            printf("4. Print the intersection of the sets \n");
+            printf("5. Delete the sets \n");
+        }
         printf("6. Exit \n");
+        if (head1 == NULL && head2 == NULL)
+            printf("Note: Few actions are available due to both sets being empty. \n");
 
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1)
+        {
+            fprintf(stderr, "Error: Invalid input. \n");
+            clearInputBuffer();
+            continue;
+        }
 
         switch (choice)
         {
             case 1:
-                printf("List 1: \n");
-                readList(&head1);
-                printf("List 2: \n");
-                readList(&head2);
+                printf("Set A: \n");
+                readSet(&head1);
+                printf("Set B: \n");
+                readSet(&head2);
                 break;
             case 2:
-                printf("List 1: ");
-                printList(head1);
-                printf("List 2: ");
-                printList(head2);
+                printList(head1, "Set A");
+                printList(head2, "Set B");
                 break;
             case 3:
-                unionHead = listUnion(head1, head2);
-                printf("The union of the lists is: ");
-                printList(unionHead);
+                unionHead = setUnion(head1, head2);
+                printList(unionHead, "Union Set (A U B)");
                 break;
             case 4:
-                intersectionHead = listIntersection(head1, head2);
-                printf("The intersection of the lists is: ");
-                printList(intersectionHead);
+                intersectionHead = setIntersection(head1, head2);
+                if (intersectionHead != NULL)
+                {
+                    printList(intersectionHead, "Intersection Set (A ∩ B)");
+                }
+                else
+                    printf("No common elements between the sets A and B. Intersection Set is empty. \n");
                 break;
             case 5:
-                freeList(&head1);
-                freeList(&head2);
+                if (head1 == NULL)
+                {
+                    printf("Set A is already empty. Set B deleted. \n");
+                    freeList(&head2);
+                }
+                else if (head2 == NULL)
+                {
+                    printf("Set A deleted. Set B is already empty. \n");
+                    freeList(&head1);
+                }
+                else
+                {
+                    printf("Both sets deleted. \n");
+                    freeList(&head1);
+                    freeList(&head2);
+                }
+                printf("Cached union and intersection sets also deleted. \n");
                 freeList(&unionHead);
                 freeList(&intersectionHead);
-                printf("Lists deleted.\n");
                 break;
             case 6:
                 printf("Program exited. \n");
@@ -85,7 +111,7 @@ int main ()
                 exit(EXIT_SUCCESS);
                 break;
             default:
-                printf("Invalid choice. \n");
+                printf("Invalid choice. Please try again. \n");
         }
     }
 
@@ -100,7 +126,7 @@ NODE* createNode(int data)
     NODE *newNode = (NODE*) malloc(sizeof(NODE));
     if (newNode == NULL)
     {
-        fprintf(stderr, "Error: Memory allocation failed.\n");
+        fprintf(stderr, "Fatal Error: Memory allocation failed.\n");
         exit(EXIT_FAILURE);
     }
     newNode->info = data;
@@ -108,20 +134,35 @@ NODE* createNode(int data)
     return newNode;
 }
 
-/// @brief reads a linked list from the user
-/// @param head pointer to the head of the list, passed by reference
-void readList(NODE **head)
+/// @brief reads a set (linked list) from the user
+/// @param head pointer to the first element of the set, passed by reference
+/// @note if the set is not empty, the new elements are appended to the set
+void readSet (NODE **head)
 {
     int data;
     NODE *newNode = NULL;
     NODE *current = *head;
 
-    printf("Enter the elements of the list (enter -1 to stop): ");
+    if (*head != NULL)
+        printf("Note: Appending \n");
+    
+    printf("Enter space-separated integers (-1 to stop): ");
     while (true)
     {
-        scanf("%d", &data);
-        if (data == -1)
+        if (scanf("%d", &data) != 1) // handle invalid inputs and clear the input buffer
+        {
+            fprintf(stderr, "Error: Invalid input. Try again. \n");
+            clearInputBuffer();
+            continue;
+        }
+        if (data == -1) // terminate if -1 is entered
             break;
+        if (searchList(*head, data) != NULL) // if the element already exists in the list, skip it with a warning
+        {
+            fprintf(stderr, "Warning: %d already exists in the set. Skipped \n", data);
+            continue;
+        }
+
         newNode = createNode(data);
         if (*head == NULL)
             *head = newNode;
@@ -133,16 +174,18 @@ void readList(NODE **head)
 
 /// @brief prints the linked list in the format: 1, 2, 3
 /// @param head is the pointer to the head of the list
-void printList (NODE *head)
+/// @param listName is the name of the list to be printed
+void printList (NODE *head, char listName[])
 {
     NODE *current = head;
     
     if (head == NULL)
     {
-        fprintf(stderr, "Error: List is empty.");
+        fprintf(stderr, "Error: %s is empty.", listName);
         return;
     }
 
+    printf("%s: ", listName);
     while (current != NULL)
     {
         printf("%d", current->info);
@@ -171,11 +214,11 @@ NODE* searchList (NODE *head, int searchFor)
     return current;
 }
 
-/// @brief Get the union of the two lists
-/// @param head1 is the pointer to the head of the first list
-/// @param head2 is the pointer to the head of the second list
-/// @return the pointer to the head of the union list
-NODE* listUnion (NODE *head1, NODE *head2)
+/// @brief Get the union of the two sets
+/// @param head1 is pointer to the first element of first set
+/// @param head2 is pointer to the first element of second set
+/// @return the pointer to the first element of the union set
+NODE* setUnion (NODE *head1, NODE *head2)
 {
     NODE *newNode = NULL;
     NODE *current1 = head1, *current2 = head2;
@@ -201,23 +244,29 @@ NODE* listUnion (NODE *head1, NODE *head2)
         if (searchList(unionHead, current2->info) == NULL)
         {
             newNode = createNode(current2->info);
-            unionCurrent->link = newNode;
-            unionCurrent = unionCurrent->link;
+            if (unionHead == NULL)
+                unionHead = newNode;
+            else
+                unionCurrent->link = newNode;
+            unionCurrent = newNode;
         }
         current2 = current2->link; // traverse list2
     }
     return unionHead;
 }
 
-/// @brief Get the intersection of the two lists
-/// @param head1 is the pointer to the head of the first list
-/// @param head2 is the pointer to the head of the second list
-/// @return the pointer to the head of the intersection list
-NODE* listIntersection (NODE *head1, NODE *head2)
+/// @brief Get the intersection of the two sets
+/// @param head1 is pointer to the first element of first set
+/// @param head2 is pointer to the first element of second set
+/// @return the pointer to the first element of the intersection set
+NODE* setIntersection (NODE *head1, NODE *head2)
 {
     NODE *newNode = NULL;
     NODE *current1 = head1;
     NODE *intersectionHead = NULL, *intersectionCurrent = NULL;
+
+    if (head1 == NULL || head2 == NULL) // if either of the set is empty, the intersection set should also be empty
+        return NULL;
 
     while (current1 != NULL)
     {
@@ -251,4 +300,12 @@ void freeList (NODE **head)
         free(temp);
     }
     *head = NULL;
+}
+
+/// @brief clears the leftover input buffer
+void clearInputBuffer ()
+{
+    char ch;
+    // read until the end of the line or end of file
+    while ((ch = getchar()) != '\n' && ch != EOF);
 }
