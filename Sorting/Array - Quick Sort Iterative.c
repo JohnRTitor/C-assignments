@@ -15,6 +15,13 @@
 
 #define MAX_SIZE 100
 
+int readArray (int arr[]);
+void printArray (int arr[], int size);
+void swap (int *a, int *b);
+int partition (int arr[], int lower, int upper);
+void quickSortIterative (int arr[], int size);
+
+
 int main ()
 {
     int arr[MAX_SIZE];

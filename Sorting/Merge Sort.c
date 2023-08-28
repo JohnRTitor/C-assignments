@@ -62,49 +62,29 @@ void mergeSort (int arr[], int lower, int upper)
 void merge(int arr[], int lower, int mid, int upper)
 {
 	int i, j, k, leftSize, rightSize;
-	int *left, *right;
+
 	leftSize = mid - lower + 1;
 	rightSize = upper - mid;
-	
-	left = (int *)calloc(leftSize, sizeof(int));
-	right = (int *)calloc(rightSize, sizeof(int));
-	
-	if (left == NULL || right == NULL)
-	{
-		fprintf(stderr, "\nError: Memory not allocated.");
-		exit(-1);
-	}
-	
+	int left[leftSize], right[rightSize];
+
 	/* Clone the elements to temporary arrays */
 	for (i = 0; i < leftSize; i++)
-	{
 		left[i] = arr[lower + i];
-	}
+	
 	for (j = 0; j < rightSize; j++)
-	{
 		right[j] = arr[mid + 1 + j];
-	}
+
 	// Merge the temporary arrays, back into arr[lower...upper], sort them one by one
 	for (i = 0, j = 0, k = lower; i < leftSize && j < rightSize; k++)
 	{
-		if (left[i] <= right[j])
-		{
-			arr[k] = left[i++];
-		}
-		else
-		{
-			arr[k] = right[j++];
-		}
+		// if left array's element is smaller than right's, copy it to arr
+		// else copy the right array's element to arr
+		arr[k] = (left[i] <= right[j]) ? left[i++] : right[j++];
 	}
 	// Copy the remaining elements of left array, if any
 	while (i < leftSize)
-	{
 		arr[k++] = left[i++];
-	}
 	// Copy the remaining elements of right subarray, if any
 	while (j < rightSize)
-	{
 		arr[k++] = right[j++];
-	}
-	free(left), free(right); // merging done, free the auxiliary space
 }

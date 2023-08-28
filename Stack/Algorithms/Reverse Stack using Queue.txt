@@ -8,7 +8,7 @@ Data Structure:- A structure QUEUE with one dimensional array to store queue ele
 Steps:-
 
 1: Start
-	2: s→top = -1; // initialise stack
+	2: s→top = -1 // initialise stack
 	3: While (true) do
         3.1: Print "Stack Operations:"
     	3.2: Print "1. Push, 2. Pop, 3. Reverse, 4. Display, 5. Exit"

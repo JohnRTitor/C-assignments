@@ -26,7 +26,7 @@ Steps:-
     		4.6.3: If data = 1 then
 				4.6.3.1: restriction ← "input"
 			4.6.4: Else
-				4.6.5: restriction ← "output"
+				4.6.4.1: restriction ← "output"
     		4.6.5: EndIf
     	4.7: EndCase
         4.8: Case option = 1
@@ -55,9 +55,9 @@ Steps:-
         4.18: Case Default
             4.18.1: Print "Invalid input. Please try again."
         4.19: EndCase
-    4.20: EndWhile
-    5: eraseDeque(q)
-6: Stop
+    5: EndWhile
+    6: eraseDeque(q)
+7: Stop
 
 				Procedure createNode (data)
 // the function gets data externally to insert in each node
