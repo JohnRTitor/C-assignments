@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
 typedef struct node // Define NODE structure
 {
 	int info;
 	struct node *link;
 } NODE;
-NODE* getNode(int data);
+
+NODE* createNode(int data);
 void createList(NODE **head);
 void printList(NODE *head);
 void freeList(NODE** head);
@@ -17,6 +19,7 @@ void insertNode(NODE **head);
 void deleteNode(NODE **head);
 void reverseList(NODE **head);
 void clearBuffer (void);
+
 int main()
 {
 	NODE *head;
@@ -25,9 +28,9 @@ int main()
 	createList(&head); // create list and modify head pointer
 	
 	/* head node's link here contains the first node's pointer */
-	if (head->link == NULL)
+	if (head == NULL)
 	{
-		fprintf(stderr, "Error: List is empty.");
+		fprintf(stderr, "Fatal Error: List is empty.");
 		exit(-1);
 	}
 	
@@ -48,30 +51,26 @@ int main()
 		switch (option)
 		{
 		case 1:
-			printList(head->link);
+			printList(head);
 			break;
 		case 2:
-			reverseList(&(head->link));
+			reverseList(&head);
 			printf("Successfully reversed the list.");
 			break;
 		case 3:
-			insertNode(&(head->link));
+			insertNode(&head);
 			break;
 		case 4:
-			deleteNode(&(head->link));
+			deleteNode(&head);
 			break;
 		case 5:
 			printf("Which element to search?");
 			scanf("%d", &searchFor);
-			position = searchList(head->link, searchFor);
+			position = searchList(head, searchFor);
 			if (position != -1)
-			{
 				printf("%d found at %d'th node.", searchFor, position);
-			}
 			else
-			{
 				printf("%d not found in the list.", searchFor);
-			}
 			break;
 		default:
 			printf("Invalid choice! Try again.\n");
@@ -79,45 +78,48 @@ int main()
 	}
 	return 0;
 }
-NODE *getNode(int data)
+NODE *createNode(int data)
 {
 	NODE *newNode = (NODE *)malloc(sizeof(NODE));
 	if (newNode == NULL)
 	{
-		fprintf(stderr, "Error: Memory allocation failed.\n");
+		fprintf(stderr, "Fatal Error: Memory allocation failed. \n");
 		exit(-1);
 	}
 	newNode->info = data;
 	newNode->link = NULL;
 	return newNode;
 }
-void createList(NODE **head)
+
+/// @brief reads a linked list from the user
+/// @param head pointer to the head of the list, passed by reference
+void readList(NODE **head)
 {
-	int i, data, size;
-	NODE *ptr;
-	*head = getNode(0); // create head node, head->link will contains the address of first node
-	printf("How many nodes to create?");
-	scanf("%d", &size);
-	if (size < 1 || *head == NULL)
-	{
-		fprintf(stderr, "Error: Invalid size/List could not be made.\n");
-		return;
-	}
-	ptr = *head;
-	for (i = 1; i <= size; i++)
-	{
-		printf("NODE#%d - Enter data to insert:", i);
-		scanf("%d", &data);
-		ptr->link = getNode(data);
-		ptr = ptr->link;
-	}
+    int data;
+    NODE *newNode = NULL;
+    NODE *current = *head;
+
+    printf("Enter the elements of the list (enter -1 to stop): ");
+    while (true)
+    {
+        scanf("%d", &data);
+        if (data == -1)
+            break;
+        newNode = createNode(data);
+        if (*head == NULL)
+            *head = newNode;
+        else
+            current->link = newNode;
+        current = newNode;
+    }   
 }
+
 void printList(NODE *head) // prints the list with , in between
 {
 	NODE *ptr;
 	if (head == NULL)
 	{
-		fprintf(stderr, "\nError: List is empty.");
+		fprintf(stderr, "Error: List is empty. \n");
 		return;
 	}
 	ptr = head;
@@ -126,35 +128,45 @@ void printList(NODE *head) // prints the list with , in between
 		printf("%d, ", ptr->info);
 		ptr = ptr->link;
 	}
+	printf("\b\b \n"); // remove the last comma and space
 }
-// Function to free the entire linked list
-void freeList(NODE** head) // frre the entire list and modify head to null
+
+/// @brief frees the memory allocated to the list
+/// @param head pointer to the first node of the list, passed by reference
+/// @note modifies the head pointer to NULL
+void freeList(NODE** head)
 {
-    NODE *current, *next;
-    current = *head;
-    while (current != NULL) {
-        next = current->link; // store the next link
-        free(current); // free current node
-        current = next; // next node becomes current
-    }
-    *head = NULL;
+    NODE *temp;
+	while (*head != NULL)
+	{
+		temp = *head;
+		*head = (*head)->link;
+		free(temp);
+	}
 }
+
+/// @brief calculates the length of the list
+/// @param head is the pointer to the first node of the list
+/// @return the length of the list, 0 if empty
 int getListLength(NODE *head)
 {
 	int count = 0;
-	NODE *ptr = head;
+	NODE *current = head;
 	if (head == NULL)
-	{
-		fprintf(stderr, "Error: List is empty.");
 		return 0;
-	}
-	while (ptr != NULL)
+	
+	while (current != NULL)
 	{
 		count++;
-		ptr = ptr->link;
+		current = current->link;
 	}
 	return count;
 }
+
+/// @brief traverses to the node at the specified position
+/// @param head is the pointer to the first node of the list
+/// @param position is the position of the node to traverse to
+/// @return the pointer to the node at the specified position, NULL if position is invalid
 NODE *traverseToNode(NODE *head, int position)
 {
 	int count = 1; // positioning starts from 1
@@ -175,6 +187,7 @@ NODE *traverseToNode(NODE *head, int position)
 	}
 	return NULL; // Return NULL if position is invalid or out of bounds
 }
+
 int searchList(NODE *head, int target) // returns the position if found else returns -1
 {
 	int count = 1;
@@ -220,7 +233,7 @@ void insertNode(NODE **head) // inserts a node in the position specified by user
 	}
 	if (position == 1) // first node insertion
 	{
-		ptr = getNode(insertThis);
+		ptr = createNode(insertThis);
 		ptr->link = *head;
 		*head = ptr;
 		printf("\n\t %d inserted successfully at the 1st position.", insertThis);
@@ -228,7 +241,7 @@ void insertNode(NODE **head) // inserts a node in the position specified by user
 	else if (position == length+1) // last node insertion
 	{
 		ptr = traverseToNode(*head, length); // traverse to the last node
-		ptr->link = getNode(insertThis);
+		ptr->link = createNode(insertThis);
 		(ptr->link)->link = NULL;
 		printf("\n\t %d inserted successfully at the last position.", insertThis);
 	}
@@ -237,7 +250,7 @@ void insertNode(NODE **head) // inserts a node in the position specified by user
 		ptr = *head;
 		ptr = traverseToNode(*head, position - 1); // traverse to the node before the desired position
 		temp = ptr->link;
-		ptr->link = getNode(insertThis);
+		ptr->link = createNode(insertThis);
 		(ptr->link)->link = temp;
 		printf("\n\t %d inserted successfully at the position#%d", insertThis, position);
 	}
@@ -302,6 +315,7 @@ void deleteNode(NODE **head) // deletes a node from a specific position or via s
 	}
 	printf("\n\t Node successfully deleted.");
 }
+
 void reverseList (NODE **head) // reverses a linked list
 {
 	NODE *current, *prev, *next;
@@ -313,7 +327,8 @@ void reverseList (NODE **head) // reverses a linked list
 	current = *head;
 	prev = NULL;
 	next = NULL;
-	while (current != NULL) {
+	while (current != NULL)
+	{
         next = current->link; // Store the next node
         current->link = prev; // Reverse the link
         // Move to the next nodes
@@ -322,7 +337,9 @@ void reverseList (NODE **head) // reverses a linked list
     }
 	*head = prev;
 }
-void clearBuffer (void) // clears input buffer
+
+/// @brief clears the input buffer
+void clearBuffer (void)
 {
 	char ch;
 	while ((ch = getchar()) != '\n' && (int)ch != EOF); // discards leftover characters in the input stream
