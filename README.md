@@ -1,4 +1,7 @@
-# C-Assignments
+# C-Assignments (Archived)
+
+
+**Note:** This repository is now archived and will not receive any further updates.
 
 This repository contains a collection of C course assignments and data structures implementations using the C programming language. These assignments are regularly uploaded by me, GitHub user JohnRTitor. The repository is organized into different category folders, each containing C code files and algorithm descriptions in the form of pseudocode in plain text (.txt) files.
 
