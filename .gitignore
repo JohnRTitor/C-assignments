@@ -14,6 +14,9 @@
 
 !Makefile
 
+# Don't ignore LICENSE
+!LICENSE
+
 # Ignore these files and folders explicitly
 tasks.json
 launch.json

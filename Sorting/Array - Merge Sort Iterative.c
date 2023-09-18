@@ -95,7 +95,7 @@ void mergeSortIterative (int arr[], int size)
     }
     // if the size is not a power of 2, merge the remaining elements
     if (p/2 < size)
-        merge(arr, 0, p/2, size - 1);
+        merge(arr, 0, (p/2) - 1, size - 1);
 }
 
 /// @brief merges two sorted subarrays into one sorted array
